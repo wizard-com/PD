@@ -1,6 +1,7 @@
 package com.example.pdthird;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+    CardView bmiCard;
     ListView lv;
     ArrayList<ReminderItem> reminderItems;
     ReminderListViewAdapter reminderLVAdapter;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 showMenu(view);
             }
         });
+        bmiCard = findViewById(R.id.bmiCard);
         btnReminder = findViewById(R.id.buttonReminder);
 
         reminderItems = new ArrayList<ReminderItem>();
@@ -49,7 +53,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
 
 
-
+        bmiCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, BmiDataActivity.class);
+                startActivity(myIntent);
+            }
+        });
         btnReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

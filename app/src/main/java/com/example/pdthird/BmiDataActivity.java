@@ -1,7 +1,11 @@
 package com.example.pdthird;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -14,10 +18,26 @@ import java.util.List;
 
 public class BmiDataActivity extends AppCompatActivity {
 
+    Button showBMI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bmi_data_layout);
+
+        showBMI = findViewById(R.id.showBMICalculator);
+
+        showBMI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(BmiDataActivity.this);
+                LayoutInflater inflater = (LayoutInflater) BmiDataActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View row = inflater.inflate(R.layout.bmi_calculator_form, null);
+                alert.setNeutralButton("Ok", null);
+                alert.setView(row);
+                AlertDialog dialog = alert.create();
+                dialog.show();
+            }
+        });
         Pie pie = AnyChart.pie();
 
         List<DataEntry> data = new ArrayList<>();
