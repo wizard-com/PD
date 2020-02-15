@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-//some change
+//some changes
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     ListView lv;
     ArrayList<ReminderItem> reminderItems;
