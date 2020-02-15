@@ -60,16 +60,17 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 startActivity(myIntent);
             }
         });
+
+
         btnReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View row = inflater.inflate(R.layout.dialog, null);
+                final View row = inflater.inflate(R.layout.dialog, null);
                 lv = (ListView)row.findViewById(R.id.lvReminderItems);
                 lv.setAdapter(reminderLVAdapter);
                 reminderLVAdapter.notifyDataSetChanged();
-
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                 alert.setNeutralButton("Ok", null);
                 alert.setView(row);
                 AlertDialog dialog = alert.create();
