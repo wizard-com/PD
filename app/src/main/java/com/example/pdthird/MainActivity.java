@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             @Override
             public void onClick(View v) {
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View row = inflater.inflate(R.layout.dialog, null);
+                View row = inflater.inflate(R.layout.dialog, null);
                 lv = (ListView)row.findViewById(R.id.lvReminderItems);
                 lv.setAdapter(reminderLVAdapter);
                 reminderLVAdapter.notifyDataSetChanged();
