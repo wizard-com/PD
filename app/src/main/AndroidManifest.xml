@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".BmiDataActivity"/>
+        <activity android:name=".NutritionDataActivity"/>
         <activity android:name=".NewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

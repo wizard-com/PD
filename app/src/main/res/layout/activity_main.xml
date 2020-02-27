@@ -39,6 +39,7 @@
                 app:rippleColor="@color/design_default_color_primary" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/nutritionCard"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="15dp"
@@ -174,13 +175,13 @@
                     android:gravity="center"
                     android:text="Health Facts"
                     android:textColor="#ffffff"
-                    android:textSize="6pt"
+                    android:textSize="7pt"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="40dp"
                     app:srcCompat="@drawable/healthfacts" />

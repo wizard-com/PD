@@ -22,7 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    CardView bmiCard, healthNewsCard;
+    CardView bmiCard, healthNewsCard, nutritionCard;
     ListView lv;
     ArrayList<ReminderItem> reminderItems;
     ReminderListViewAdapter reminderLVAdapter;
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
         bmiCard = findViewById(R.id.bmiCard);
         healthNewsCard = findViewById(R.id.healthNewsCard);
+        nutritionCard = findViewById(R.id.nutritionCard);
+
         btnReminder = findViewById(R.id.buttonReminder);
 
         reminderItems = new ArrayList<ReminderItem>();
@@ -53,6 +55,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
         reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
 
+
+        nutritionCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, NutritionDataActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
         healthNewsCard.setOnClickListener(new View.OnClickListener() {
             @Override
