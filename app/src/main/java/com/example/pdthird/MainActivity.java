@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         nutritionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, NutritionDataActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, NutritionValueActivity.class);
                 startActivity(myIntent);
             }
         });

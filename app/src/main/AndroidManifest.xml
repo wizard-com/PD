@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".BmiDataActivity"/>
         <activity android:name=".NutritionDataActivity"/>
+        <activity android:name=".NutritionValueActivity"/>
         <activity android:name=".NewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
