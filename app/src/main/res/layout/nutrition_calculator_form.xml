@@ -51,26 +51,17 @@
             android:textColor="#ffffff" />
 
         <Button
-            android:id="@+id/delete"
+            android:id="@+id/viewLineGraph"
             android:layout_width="130dp"
             android:layout_height="35dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
-            android:background="#EE3F31"
-            android:text="Delete"
+            android:background="#A62ABD"
+            android:text="Line Graph"
             android:textColor="#ffffff" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/viewLineGraph"
-        android:layout_width="280dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:background="#A62ABD"
-        android:text="View Line Graph"
-        android:textColor="#ffffff" />
 
     <ListView
         android:id="@+id/listViewNutrition"

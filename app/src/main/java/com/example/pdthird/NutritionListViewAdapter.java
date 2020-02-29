@@ -35,7 +35,7 @@ public class NutritionListViewAdapter extends ArrayAdapter {
         // Obtain the UI components and do the necessary binding
         TextView tvName = rowView.findViewById(R.id.textViewFood);
         TextView tvQty = rowView.findViewById(R.id.textViewQty);
-
+        ImageView imgDelete = rowView.findViewById(R.id.imageViewDelete);
 
         // Obtain the Android Version information based on the position
         NutritionItem item = nutritionItemsList.get(position);
@@ -43,6 +43,7 @@ public class NutritionListViewAdapter extends ArrayAdapter {
         // Set values to the TextView to display the corresponding information
         tvName.setText(item.getName());
         tvQty.setText(item.getQty()+"");
+        imgDelete.setImageResource(android.R.drawable.ic_delete);
         return rowView;
     }
 }
