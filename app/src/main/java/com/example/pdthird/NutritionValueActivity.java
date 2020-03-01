@@ -28,9 +28,10 @@ public class NutritionValueActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     CustomPageAdapter customPageAdapter;
-    ArrayList<Integer> pageItems;
+    ArrayList<PageItem> pageItems;
     EditText etFood, etQty;
-    Button btnViewData, btnAdd;
+    Button btnViewData, btnAdd, btnDelete;
+    int current_position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +41,63 @@ public class NutritionValueActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.chartViewPager);
         btnViewData = findViewById(R.id.viewLineGraph);
         btnAdd = findViewById(R.id.add);
+        btnDelete = findViewById(R.id.delete);
         etFood = findViewById(R.id.editTextFood);
         etQty = findViewById(R.id.editTextQty);
 
-        pageItems = new ArrayList<Integer>();
+        pageItems = new ArrayList<PageItem>();
 
 
 
-        pageItems.add(R.drawable.bmi);
-        pageItems.add(R.drawable.healthfacts);
-        pageItems.add(R.drawable.steps);
-        pageItems.add(R.drawable.glass2);
+
+
 
         customPageAdapter = new CustomPageAdapter(NutritionValueActivity.this, pageItems);
         viewPager.setAdapter(customPageAdapter);
-        customPageAdapter.notifyDataSetChanged();
 
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                current_position = position;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
+                alertDialog.setTitle("Confirmation");
+                alertDialog.setMessage("Are you sure you want to delete?"+current_position+" "+pageItems.size());
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                pageItems.remove(current_position);
+                                customPageAdapter.notifyDataSetChanged();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +118,12 @@ public class NutritionValueActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else {
-                    NutritionItem item = new NutritionItem(foodName, Integer.parseInt(qty));
+                    ArrayList<DataEntry> entries = new ArrayList<DataEntry>();
+                    entries.add(new ValueDataEntry("First", Integer.parseInt(qty)));
+                    entries.add(new ValueDataEntry("Second", Integer.parseInt(qty)+20));
+                    entries.add(new ValueDataEntry("Third", Integer.parseInt(qty)+50));
+                    pageItems.add(new PageItem(new AnyChart(), entries));
+                    customPageAdapter.notifyDataSetChanged();
                 }
             }
         });

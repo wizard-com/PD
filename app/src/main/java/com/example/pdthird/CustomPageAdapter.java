@@ -9,6 +9,8 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 
 import java.util.ArrayList;
@@ -18,10 +20,10 @@ public class CustomPageAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<AnyChart> chartViews;
+    private ArrayList<PageItem> chartViews;
 
 
-    public CustomPageAdapter(Context context, ArrayList<AnyChart> chartViews) {
+    public CustomPageAdapter(Context context, ArrayList<PageItem> chartViews) {
         this.context = context;
         this.chartViews = chartViews;
     }
@@ -40,11 +42,14 @@ public class CustomPageAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
 
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        AnyChart chart = chartViews.get(position);
+        PageItem chart = chartViews.get(position);
         View view = layoutInflater.inflate(R.layout.slider_item, container, false);
         AnyChartView chartView = view.findViewById(R.id.any_chart_item);
 
-        chartView.setChart(chart.pie());
+        Pie pie = chart.getAnyChart().pie();
+
+        pie.data(chart.getDataEntries());
+        chartView.setChart(pie);
         container.addView(view);
 
         return view;
