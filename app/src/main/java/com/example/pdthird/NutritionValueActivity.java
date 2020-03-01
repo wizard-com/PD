@@ -6,32 +6,55 @@ import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
+
 import android.widget.Button;
 import android.widget.EditText;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.anychart.AnyChart;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.charts.Pie;
+import com.anychart.core.annotations.Line;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NutritionValueActivity extends AppCompatActivity {
 
+    ViewPager viewPager;
+    CustomPageAdapter customPageAdapter;
+    ArrayList<Integer> pageItems;
     EditText etFood, etQty;
     Button btnViewData, btnAdd;
-    ArrayList<NutritionItem> nutritionItems;
-    NutritionListViewAdapter nutritionLVAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nutrition_calculator_form);
+
+        viewPager = findViewById(R.id.chartViewPager);
         btnViewData = findViewById(R.id.viewLineGraph);
         btnAdd = findViewById(R.id.add);
         etFood = findViewById(R.id.editTextFood);
         etQty = findViewById(R.id.editTextQty);
 
+        pageItems = new ArrayList<Integer>();
 
+
+
+        pageItems.add(R.drawable.bmi);
+        pageItems.add(R.drawable.healthfacts);
+        pageItems.add(R.drawable.steps);
+        pageItems.add(R.drawable.glass2);
+
+        customPageAdapter = new CustomPageAdapter(NutritionValueActivity.this, pageItems);
+        viewPager.setAdapter(customPageAdapter);
+        customPageAdapter.notifyDataSetChanged();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,4 +97,7 @@ public class NutritionValueActivity extends AppCompatActivity {
             return false;
         }
     }
+
+
+
 }
