@@ -5,13 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +19,6 @@ public class NutritionValueActivity extends AppCompatActivity {
 
     EditText etFood, etQty;
     Button btnViewData, btnAdd;
-    ListView lvNutritionItems;
     ArrayList<NutritionItem> nutritionItems;
     NutritionListViewAdapter nutritionLVAdapter;
 
@@ -31,13 +28,9 @@ public class NutritionValueActivity extends AppCompatActivity {
         setContentView(R.layout.nutrition_calculator_form);
         btnViewData = findViewById(R.id.viewLineGraph);
         btnAdd = findViewById(R.id.add);
-        lvNutritionItems = findViewById(R.id.listViewNutrition);
         etFood = findViewById(R.id.editTextFood);
         etQty = findViewById(R.id.editTextQty);
 
-        nutritionItems = new ArrayList<NutritionItem>();
-        nutritionLVAdapter = new NutritionListViewAdapter(NutritionValueActivity.this, R.layout.custom_nutrition_list, nutritionItems);
-        lvNutritionItems.setAdapter(nutritionLVAdapter);
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +54,6 @@ public class NutritionValueActivity extends AppCompatActivity {
                 }
                 else {
                     NutritionItem item = new NutritionItem(foodName, Integer.parseInt(qty));
-                    nutritionItems.add(item);
-                    nutritionLVAdapter.notifyDataSetChanged();
                 }
             }
         });
