@@ -42,7 +42,6 @@
         android:id="@+id/nutritionCard"
         android:layout_width="370dp"
         android:layout_height="150dp"
-        android:layout_margin="5dp"
         android:layout_gravity="center"
         app:cardBackgroundColor="#57B7DF"
         app:cardUseCompatPadding="true">

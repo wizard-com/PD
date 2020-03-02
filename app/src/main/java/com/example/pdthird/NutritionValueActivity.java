@@ -17,12 +17,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.anychart.AnyChart;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
-import com.anychart.charts.Pie;
-import com.anychart.core.annotations.Line;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NutritionValueActivity extends AppCompatActivity {
 

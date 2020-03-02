@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         bmiCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, BmiDataActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, BmiValueActivity.class);
                 startActivity(myIntent);
             }
         });
