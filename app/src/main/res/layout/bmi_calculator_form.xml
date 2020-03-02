@@ -9,7 +9,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="70dp">
+        android:layout_marginBottom="40dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
 
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/editTextWeight"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -44,7 +44,7 @@
 
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/editTextHeight"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="15dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:id="@+id/textViewBMIResult"
                 android:layout_width="match_parent"
                 android:layout_marginTop="30dp"
-                android:layout_height="35dp"
+                android:layout_height="45dp"
                 android:textSize="8pt"
                 android:gravity="center"
                 android:text="" />
@@ -103,7 +103,7 @@
     <Button
         android:id="@+id/viewWaterfallChart"
         android:layout_width="match_parent"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_gravity="center"
