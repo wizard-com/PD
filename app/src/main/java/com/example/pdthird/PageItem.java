@@ -9,6 +9,13 @@ public class PageItem {
 
     private AnyChart anyChart;
     private ArrayList<DataEntry> dataEntries;
+    private String title;
+
+    public PageItem(AnyChart anyChart, ArrayList<DataEntry> entries, String title) {
+        this.anyChart = anyChart;
+        this.dataEntries = entries;
+        this.title = title;
+    }
 
     public AnyChart getAnyChart() {
         return anyChart;
@@ -27,11 +34,12 @@ public class PageItem {
         this.dataEntries = dataEntries;
     }
 
-
-    public PageItem(AnyChart anyChart, ArrayList<DataEntry> entries) {
-        this.anyChart = anyChart;
-        this.dataEntries = entries;
+    public String getTitle() {
+        return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 }

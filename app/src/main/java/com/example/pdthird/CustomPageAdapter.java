@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
+
 import com.anychart.charts.Pie;
 
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class CustomPageAdapter extends PagerAdapter {
         AnyChartView chartView = view.findViewById(R.id.any_chart_item);
 
         Pie pie = chart.getAnyChart().pie();
+        pie.title(chart.getTitle());
 
         pie.data(chart.getDataEntries());
         chartView.setChart(pie);
@@ -59,7 +59,20 @@ public class CustomPageAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
-        container.refreshDrawableState();
+        container.removeView((View)object);
 
+    }
+    public int addView(PageItem pageItem, int position){
+        chartViews.add(position, pageItem);
+        return position;
+    }
+    public int removeView(ViewPager pager, int position){
+        pager.setAdapter(null);
+        chartViews.remove(position);
+        pager.setAdapter(this);
+        return position;
+    }
+    public PageItem getPageItem(int position){
+        return chartViews.get(position);
     }
 }

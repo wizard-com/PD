@@ -9,9 +9,12 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.anychart.AnyChart;
@@ -28,6 +31,8 @@ public class NutritionValueActivity extends AppCompatActivity {
     EditText etFood, etQty;
     Button btnViewData, btnAdd, btnDelete;
     int current_position;
+    ArrayList<ImageView> dots;
+    LinearLayout dotsContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +45,10 @@ public class NutritionValueActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.delete);
         etFood = findViewById(R.id.editTextFood);
         etQty = findViewById(R.id.editTextQty);
+        dotsContainer = findViewById(R.id.dotsContainer);
 
         pageItems = new ArrayList<PageItem>();
-
-
-
-
-
+        dots = new ArrayList<ImageView>();
 
         customPageAdapter = new CustomPageAdapter(NutritionValueActivity.this, pageItems);
         viewPager.setAdapter(customPageAdapter);
@@ -60,7 +62,12 @@ public class NutritionValueActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+
                 current_position = position;
+                for (int i = 0; i < customPageAdapter.getCount(); i++){
+                    dots.get(i).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
+                }
+                dots.get(position).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
             }
 
             @Override
@@ -81,8 +88,24 @@ public class NutritionValueActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                if (pageItems.size() < 1 || dots.size() < 1 || dotsContainer.getChildCount() < 1){
+                                    btnDelete.setEnabled(false);
+                                }
+                                else {
+                                    btnDelete.setEnabled(true);
+                                }
                                 pageItems.remove(current_position);
+                                dots.remove(current_position);
+                                dotsContainer.removeViewAt(current_position);
                                 customPageAdapter.notifyDataSetChanged();
+
+                                if(current_position >= 1 && dots.size() > 0){
+                                    dots.get(current_position-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                                }
+                                else if(current_position == 0 && dots.size() > 0 || dots.size() == 1){
+                                    dots.get(0).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                                }
                             }
                         });
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
@@ -118,8 +141,12 @@ public class NutritionValueActivity extends AppCompatActivity {
                     entries.add(new ValueDataEntry("First", Integer.parseInt(qty)));
                     entries.add(new ValueDataEntry("Second", Integer.parseInt(qty)+20));
                     entries.add(new ValueDataEntry("Third", Integer.parseInt(qty)+50));
-                    pageItems.add(new PageItem(new AnyChart(), entries));
+                    pageItems.add(new PageItem(new AnyChart(), entries, foodName));
                     customPageAdapter.notifyDataSetChanged();
+                    dots.add(new ImageView(NutritionValueActivity.this));
+                    dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
+                    dotsContainer.addView(dots.get(dots.size()-1));
+                    dots.get(0).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
                 }
             }
         });
