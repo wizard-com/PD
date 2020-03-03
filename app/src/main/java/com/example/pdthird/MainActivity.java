@@ -22,11 +22,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    CardView bmiCard, healthNewsCard, nutritionCard;
+
+    CardView bmiCard, healthNewsCard, nutritionCard, moreOptionsCard;
     ListView lv;
     ArrayList<ReminderItem> reminderItems;
     ReminderListViewAdapter reminderLVAdapter;
     Button btnReminder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +36,11 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showMenu(view);
-            }
-        });
+
         bmiCard = findViewById(R.id.bmiCard);
         healthNewsCard = findViewById(R.id.healthNewsCard);
         nutritionCard = findViewById(R.id.nutritionCard);
+        moreOptionsCard = findViewById(R.id.moreOptionsCard);
 
         btnReminder = findViewById(R.id.buttonReminder);
 
@@ -80,6 +77,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
+        moreOptionsCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMenu(v);
+            }
+        });
 
         btnReminder.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,12 +8,8 @@
     </item>
      <item android:id="@+id/mental" android:title="Mental Health">
          <menu>
-             <item android:id="@+id/quotes" android:title="Quotes">
-             </item>
-             <item android:id="@+id/puzzles" android:title="Puzzle Games">
-             </item>
-             <item android:id="@+id/wallpapers" android:title="Jokes">
-             </item>
+             <item android:id="@+id/quotes" android:title="Quotes"></item>
+             <item android:id="@+id/jokes" android:title="Jokes"></item>
          </menu>
      </item>
 </menu>
