@@ -84,18 +84,13 @@ public class NutritionValueActivity extends AppCompatActivity {
                 alertDialog.setTitle("Confirmation");
                 alertDialog.setMessage("Are you sure you want to delete?"+current_position+" "+pageItems.size());
 
+
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if (pageItems.size() < 1 || dots.size() < 1 || dotsContainer.getChildCount() < 1){
-                                    btnDelete.setEnabled(false);
-                                }
-                                else {
-                                    btnDelete.setEnabled(true);
-                                }
-                                pageItems.remove(current_position);
+                                customPageAdapter.removeView(viewPager, current_position);
                                 dots.remove(current_position);
                                 dotsContainer.removeViewAt(current_position);
                                 customPageAdapter.notifyDataSetChanged();
@@ -141,7 +136,7 @@ public class NutritionValueActivity extends AppCompatActivity {
                     entries.add(new ValueDataEntry("First", Integer.parseInt(qty)));
                     entries.add(new ValueDataEntry("Second", Integer.parseInt(qty)+20));
                     entries.add(new ValueDataEntry("Third", Integer.parseInt(qty)+50));
-                    pageItems.add(new PageItem(new AnyChart(), entries, foodName));
+                    customPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), customPageAdapter.getCount());
                     customPageAdapter.notifyDataSetChanged();
                     dots.add(new ImageView(NutritionValueActivity.this));
                     dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
@@ -167,7 +162,4 @@ public class NutritionValueActivity extends AppCompatActivity {
             return false;
         }
     }
-
-
-
 }

@@ -152,6 +152,7 @@
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/healthFactsCard"
             android:layout_width="108dp"
             android:layout_height="210dp"
             android:layout_margin="5dp"
@@ -196,6 +197,7 @@
         android:layout_marginTop="3dp"
         android:clickable="true"
         app:cardBackgroundColor="#FFDE03">
+
         <TextView
             android:id="@+id/textViewMore"
             android:layout_width="wrap_content"
