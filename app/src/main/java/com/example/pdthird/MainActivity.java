@@ -3,7 +3,6 @@ package com.example.pdthird;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,14 +45,19 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         btnReminder = findViewById(R.id.buttonReminder);
 
         reminderItems = new ArrayList<ReminderItem>();
+        reminderItems.add(new ReminderItem("10 glasses of water", R.drawable.glass2));
+        reminderItems.add(new ReminderItem("5 minutes of meditation", R.drawable.meditation2));
+        reminderItems.add(new ReminderItem("9000 steps", R.drawable.steps));
+        reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
+        reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
         reminderLVAdapter = new ReminderListViewAdapter(MainActivity.this, R.layout.custom_list_view, reminderItems);
-        addItems();
 
 
         healthFactsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent myIntent = new Intent(MainActivity.this, HealthFactsActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         healthNewsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, NewsActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, HealthNewsActivity.class);
                 startActivity(myIntent);
             }
         });
@@ -144,11 +148,5 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         return super.onOptionsItemSelected(item);
     }
-    private void addItems(){
-        reminderItems.add(new ReminderItem("10 glasses of water", R.drawable.glass2));
-        reminderItems.add(new ReminderItem("5 minutes of meditation", R.drawable.meditation2));
-        reminderItems.add(new ReminderItem("9000 steps", R.drawable.steps));
-        reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
-        reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
-    }
+
 }

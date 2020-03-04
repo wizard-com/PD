@@ -197,7 +197,6 @@
         android:layout_marginTop="3dp"
         android:clickable="true"
         app:cardBackgroundColor="#FFDE03">
-
         <TextView
             android:id="@+id/textViewMore"
             android:layout_width="wrap_content"

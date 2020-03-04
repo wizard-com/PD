@@ -3,6 +3,7 @@ package com.example.pdthird;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -10,16 +11,25 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class NewsActivity extends AppCompatActivity {
+public class HealthNewsActivity extends AppCompatActivity {
 private WebView webView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.news_web_view);
+        setContentView(R.layout.activity_health_news);
         Toolbar toolbar = findViewById(R.id.toolbarNews);
         setSupportActionBar(toolbar);
-        webView = findViewById(R.id.web_view);
+        webView = findViewById(R.id.web_view_health_news);
         webView.setWebViewClient(new WebViewClient());
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+        settings.setDomStorageEnabled(true);
     }
 
     @Override
@@ -43,7 +53,6 @@ private WebView webView;
         String url = "";
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.bbc) {
             url = "https://www.bbc.com/news/health";
         }

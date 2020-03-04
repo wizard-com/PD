@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.pdthird.HealthFactsActivity">
+
+    <item
+        android:id="@+id/best_life"
+        android:title="bestlifeonline.com"></item>
+    <item
+        android:id="@+id/the_good_body"
+        android:title="thegoodbody.com"></item>
+    <item
+        android:id="@+id/amazing_health_facts"
+        android:title="amazinghealthfacts.org"></item>
+    <item
+        android:id="@+id/spectrum_health_care"
+        android:title="spectrumhealthcare.com"></item>
+</menu>

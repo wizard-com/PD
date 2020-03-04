@@ -23,7 +23,8 @@
         <activity android:name=".NutritionValueActivity"/>
         <activity android:name=".NutritionDataActivity"/>
         <activity android:name=".BmiValueActivity"/>
-        <activity android:name=".NewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".HealthFactsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".HealthNewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
