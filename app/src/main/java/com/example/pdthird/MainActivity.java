@@ -117,36 +117,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.mental) {
-            Toast.makeText(this, "Mental", Toast.LENGTH_LONG).show();
-            if (item.getItemId() == R.id.quotes){
-                Toast.makeText(this, "Quotes", Toast.LENGTH_LONG).show();
+        Intent myIntent = null;
+            if (item.getItemId() == R.id.quotes) {
+                myIntent = new Intent(MainActivity.this, QuotesActivity.class);
+                startActivity(myIntent);
             }
-            return true;
-        }
-       else {
-            Toast.makeText(this, "Physical", Toast.LENGTH_LONG).show();
-            return true;
-        }
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 }
