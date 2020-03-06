@@ -25,6 +25,7 @@
         <activity android:name=".BmiValueActivity"/>
         <activity android:name=".HealthFactsActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".HealthNewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".QuotesCategoriesActivity"/>
         <activity android:name=".QuotesActivity"/>
     </application>
 

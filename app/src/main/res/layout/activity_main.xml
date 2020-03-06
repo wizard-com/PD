@@ -93,10 +93,9 @@
 
                     <ImageView
                         android:id="@+id/imageView3"
-                        android:layout_width="110dp"
-                        android:layout_height="70dp"
+                        android:layout_width="125dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
                         app:srcCompat="@drawable/news" />
 
                     <TextView
@@ -131,8 +130,8 @@
 
                         <ImageView
                             android:id="@+id/imageView4"
-                            android:layout_width="110dp"
-                            android:layout_height="70dp"
+                            android:layout_width="115dp"
+                            android:layout_height="75dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="10dp"
                             app:srcCompat="@drawable/bmi" />
@@ -178,8 +177,8 @@
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="40dp"
                     app:srcCompat="@drawable/healthfacts" />

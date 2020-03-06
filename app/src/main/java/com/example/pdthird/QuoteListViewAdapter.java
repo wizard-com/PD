@@ -1,7 +1,6 @@
 package com.example.pdthird;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,29 +8,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
 
-public class GridAdapter extends ArrayAdapter {
+public class QuoteListViewAdapter extends ArrayAdapter {
 
     private Context parent_context;
     private int layout_id;
-    private ArrayList<GridItem> imageIDs;
+    private ArrayList<QuoteItem> quoteItems;
 
-    public GridAdapter(Context context, int id, ArrayList<GridItem> objects) {
+    public QuoteListViewAdapter(Context context, int id, ArrayList<QuoteItem> objects) {
         super(context, id, objects);
         this.parent_context = context;
         this.layout_id = id;
-        this.imageIDs = objects;
+        this.quoteItems = objects;
     }
-
-
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Obtain the LayoutInflater object
@@ -41,20 +34,16 @@ public class GridAdapter extends ArrayAdapter {
         View rowView = inflater.inflate(layout_id, parent, false);
 
         // Obtain the UI components and do the necessary binding
-        TextView tvTitle = rowView.findViewById(R.id.textViewTitle);
-        ImageView ivItem = rowView.findViewById(R.id.imageViewCategory);
+        TextView tv = rowView.findViewById(R.id.textViewQuote);
+        CardView  cv = rowView.findViewById(R.id.quoteCard);
 
         // Obtain the Android Version information based on the position
-        GridItem item = imageIDs.get(position);
+        QuoteItem item = quoteItems.get(position);
 
         // Set values to the TextView to display the corresponding information
-        tvTitle.setBackgroundColor(Color.parseColor(item.getColorCode()));
-        tvTitle.setText(item.getTitle());
-        ivItem.setImageResource(item.getImageID());
+        tv.setText(item.getQuoteBody());
+        cv.setBackgroundColor(Color.parseColor(item.getColorCode()));
 
         return rowView;
     }
-
-
-
 }

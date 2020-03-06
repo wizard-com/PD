@@ -12,11 +12,9 @@ import androidx.cardview.widget.CardView;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -119,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         Intent myIntent = null;
             if (item.getItemId() == R.id.quotes) {
-                myIntent = new Intent(MainActivity.this, QuotesActivity.class);
+                myIntent = new Intent(MainActivity.this, QuotesCategoriesActivity.class);
                 startActivity(myIntent);
             }
 
