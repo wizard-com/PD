@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class JokesActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-    NutritionPageAdapter jokesPageAdapter;
+    JokesPageAdapter jokesPageAdapter;
     ArrayList<JokeItem> jokeItems;
     RequestQueue requestQueue;
 
@@ -32,7 +32,9 @@ public class JokesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_jokes);
         requestQueue = Volley.newRequestQueue(JokesActivity.this);
         viewPager = findViewById(R.id.viewPagerJokes);
-
+        jokeItems = new ArrayList<JokeItem>();
+        jokesPageAdapter = new JokesPageAdapter(JokesActivity.this, jokeItems);
+        viewPager.setAdapter(jokesPageAdapter);
         jsonParse();
     }
 
@@ -44,9 +46,13 @@ public class JokesActivity extends AppCompatActivity {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject object = response.getJSONObject(i);
-                        String body = object.getString("setup");
+                        String content = object.getString("setup");
                         String punchline = object.getString("punchline");
+                        JokeItem jokeItem = new JokeItem(content, punchline);
+                        jokeItems.add(jokeItem);
                     }
+                    jokesPageAdapter.notifyDataSetChanged();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
