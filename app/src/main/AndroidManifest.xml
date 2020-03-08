@@ -27,6 +27,7 @@
         <activity android:name=".HealthNewsActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".QuotesCategoriesActivity"/>
         <activity android:name=".QuotesActivity"/>
+        <activity android:name=".JokesActivity"/>
     </application>
 
 </manifest>

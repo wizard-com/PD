@@ -16,13 +16,13 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class GridAdapter extends ArrayAdapter {
+public class QuotesGridAdapter extends ArrayAdapter {
 
     private Context parent_context;
     private int layout_id;
     private ArrayList<GridItem> imageIDs;
 
-    public GridAdapter(Context context, int id, ArrayList<GridItem> objects) {
+    public QuotesGridAdapter(Context context, int id, ArrayList<GridItem> objects) {
         super(context, id, objects);
         this.parent_context = context;
         this.layout_id = id;

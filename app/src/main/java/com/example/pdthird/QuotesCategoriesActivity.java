@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 public class QuotesCategoriesActivity extends AppCompatActivity {
 
     GridView gridView;
-    GridAdapter gridAdapter;
+    QuotesGridAdapter quotesGridAdapter;
     ArrayList<GridItem> gridItems;
 
     @Override
@@ -31,9 +30,9 @@ public class QuotesCategoriesActivity extends AppCompatActivity {
         gridItems.add(new GridItem("Knowledge", R.drawable.knowledge, "#4AA84A"));
         gridItems.add(new GridItem("Art", R.drawable.art, "#D93E8F"));
 
-        gridAdapter = new GridAdapter(QuotesCategoriesActivity.this, R.layout.custom_grid_item, gridItems);
-        gridAdapter.notifyDataSetChanged();
-        gridView.setAdapter(gridAdapter);
+        quotesGridAdapter = new QuotesGridAdapter(QuotesCategoriesActivity.this, R.layout.custom_grid_item, gridItems);
+        quotesGridAdapter.notifyDataSetChanged();
+        gridView.setAdapter(quotesGridAdapter);
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

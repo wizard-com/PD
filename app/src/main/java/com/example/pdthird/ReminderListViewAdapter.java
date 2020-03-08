@@ -13,15 +13,15 @@ import java.util.ArrayList;
 
 public class ReminderListViewAdapter extends ArrayAdapter {
 
-    Context parent_context;
-    int layout_id;
-    ArrayList<ReminderItem> itemsList;
+    private Context parent_context;
+    private int layout_id;
+    private ArrayList<ReminderItem> itemsList;
 
-    public ReminderListViewAdapter(Context context, int id, ArrayList<ReminderItem> objects) {
-        super(context, id, objects);
-        parent_context = context;
-        layout_id = id;
-        itemsList = objects;
+    public ReminderListViewAdapter(Context context, int id, ArrayList<ReminderItem> itemsList) {
+        super(context, id, itemsList);
+        this.parent_context = context;
+        this.layout_id = id;
+        this.itemsList = itemsList;
     }
 
     @Override

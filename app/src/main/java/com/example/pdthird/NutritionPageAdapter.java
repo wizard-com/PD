@@ -13,16 +13,15 @@ import com.anychart.AnyChartView;
 import com.anychart.charts.Pie;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CustomPageAdapter extends PagerAdapter {
+public class NutritionPageAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<PageItem> chartViews;
 
 
-    public CustomPageAdapter(Context context, ArrayList<PageItem> chartViews) {
+    public NutritionPageAdapter(Context context, ArrayList<PageItem> chartViews) {
         this.context = context;
         this.chartViews = chartViews;
     }
@@ -42,7 +41,7 @@ public class CustomPageAdapter extends PagerAdapter {
 
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         PageItem chart = chartViews.get(position);
-        View view = layoutInflater.inflate(R.layout.slider_item, container, false);
+        View view = layoutInflater.inflate(R.layout.custom_nutrition_chart, container, false);
         AnyChartView chartView = view.findViewById(R.id.any_chart_item);
 
         Pie pie = chart.getAnyChart().pie();

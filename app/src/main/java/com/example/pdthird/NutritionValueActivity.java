@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class NutritionValueActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-    CustomPageAdapter customPageAdapter;
+    NutritionPageAdapter nutritionPageAdapter;
     ArrayList<PageItem> pageItems;
     EditText etFood, etQty;
     Button btnViewData, btnAdd, btnDelete;
@@ -50,8 +50,8 @@ public class NutritionValueActivity extends AppCompatActivity {
         pageItems = new ArrayList<PageItem>();
         dots = new ArrayList<ImageView>();
 
-        customPageAdapter = new CustomPageAdapter(NutritionValueActivity.this, pageItems);
-        viewPager.setAdapter(customPageAdapter);
+        nutritionPageAdapter = new NutritionPageAdapter(NutritionValueActivity.this, pageItems);
+        viewPager.setAdapter(nutritionPageAdapter);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -64,7 +64,7 @@ public class NutritionValueActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
 
                 current_position = position;
-                for (int i = 0; i < customPageAdapter.getCount(); i++){
+                for (int i = 0; i < nutritionPageAdapter.getCount(); i++){
                     dots.get(i).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
                 }
                 dots.get(position).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
@@ -90,10 +90,10 @@ public class NutritionValueActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                customPageAdapter.removeView(viewPager, current_position);
+                                nutritionPageAdapter.removeView(viewPager, current_position);
                                 dots.remove(current_position);
                                 dotsContainer.removeViewAt(current_position);
-                                customPageAdapter.notifyDataSetChanged();
+                                nutritionPageAdapter.notifyDataSetChanged();
 
                                 if(current_position >= 1 && dots.size() > 0){
                                     dots.get(current_position-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
@@ -136,8 +136,8 @@ public class NutritionValueActivity extends AppCompatActivity {
                     entries.add(new ValueDataEntry("First", Integer.parseInt(qty)));
                     entries.add(new ValueDataEntry("Second", Integer.parseInt(qty)+20));
                     entries.add(new ValueDataEntry("Third", Integer.parseInt(qty)+50));
-                    customPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), customPageAdapter.getCount());
-                    customPageAdapter.notifyDataSetChanged();
+                    nutritionPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), nutritionPageAdapter.getCount());
+                    nutritionPageAdapter.notifyDataSetChanged();
                     dots.add(new ImageView(NutritionValueActivity.this));
                     dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
                     dotsContainer.addView(dots.get(dots.size()-1));

@@ -115,11 +115,17 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+
         Intent myIntent = null;
-            if (item.getItemId() == R.id.quotes) {
-                myIntent = new Intent(MainActivity.this, QuotesCategoriesActivity.class);
-                startActivity(myIntent);
-            }
+
+        if (item.getItemId() == R.id.quotes) {
+            myIntent = new Intent(MainActivity.this, QuotesCategoriesActivity.class);
+            startActivity(myIntent);
+        }
+        else if (item.getItemId() == R.id.jokes) {
+            myIntent = new Intent(MainActivity.this, JokesActivity.class);
+            startActivity(myIntent);
+        }
 
         return true;
     }
