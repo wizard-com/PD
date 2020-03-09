@@ -46,4 +46,7 @@ public class QuoteListViewAdapter extends ArrayAdapter {
 
         return rowView;
     }
+    public void add(QuoteItem quoteItem){
+        quoteItems.add(quoteItem);
+    }
 }

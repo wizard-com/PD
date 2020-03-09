@@ -65,7 +65,7 @@ public class QuotesActivity extends AppCompatActivity {
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
                         String body = object.getString("body");
-                        arrayList.add(new QuoteItem(color_code, body));
+                        quoteListViewAdapter.add(new QuoteItem(color_code, body));
                     }
                     quoteListViewAdapter.notifyDataSetChanged();
                 }

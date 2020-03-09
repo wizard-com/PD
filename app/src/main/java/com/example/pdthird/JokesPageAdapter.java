@@ -57,4 +57,12 @@ public class JokesPageAdapter extends PagerAdapter {
         container.removeView((View)object);
 
     }
+
+    public void removeAll(){
+        jokeItems.clear();
+    }
+
+    public void add(JokeItem jokeItem){
+        jokeItems.add(jokeItem);
+    }
 }
