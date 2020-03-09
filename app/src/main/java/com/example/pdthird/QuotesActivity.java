@@ -4,8 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +33,8 @@ import java.util.Map;
 public class QuotesActivity extends AppCompatActivity {
 
     ListView listView;
+    ProgressBar progressBar;
+    LinearLayout linearLayout;
     QuoteListViewAdapter quoteListViewAdapter;
     ArrayList<QuoteItem> arrayList;
     private String color_code;
@@ -46,6 +53,16 @@ public class QuotesActivity extends AppCompatActivity {
         listView.setAdapter(quoteListViewAdapter);
         requestQueue = Volley.newRequestQueue(QuotesActivity.this);
 
+        progressBar = new ProgressBar(QuotesActivity.this, null, android.R.attr.progressBarStyleLarge);
+        linearLayout = findViewById(R.id.listViewLayout);
+
+        LinearLayout.LayoutParams pLayoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        progressBar.setLayoutParams(pLayoutParams);
+        pLayoutParams.gravity = Gravity.CENTER;
+        linearLayout.addView(progressBar);
+
        Intent intent = getIntent();
        String[] data = intent.getStringArrayExtra("path_and_color");
        path = data[0];
@@ -60,14 +77,15 @@ public class QuotesActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    progressBar.setVisibility(View.VISIBLE);
                     JSONArray array = response.getJSONArray("quotes");
-
                     for (int i = 0; i < array.length(); i++){
                         JSONObject object = array.getJSONObject(i);
                         String body = object.getString("body");
                         quoteListViewAdapter.add(new QuoteItem(color_code, body));
                     }
                     quoteListViewAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
                 }
                 catch (JSONException e){
                     e.printStackTrace();

@@ -43,13 +43,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         btnReminder = findViewById(R.id.buttonReminder);
 
         reminderItems = new ArrayList<ReminderItem>();
+        reminderLVAdapter = new ReminderListViewAdapter(MainActivity.this, R.layout.custom_list_view, reminderItems);
         reminderItems.add(new ReminderItem("10 glasses of water", R.drawable.glass2));
         reminderItems.add(new ReminderItem("5 minutes of meditation", R.drawable.meditation2));
         reminderItems.add(new ReminderItem("9000 steps", R.drawable.steps));
         reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
         reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
-        reminderLVAdapter = new ReminderListViewAdapter(MainActivity.this, R.layout.custom_list_view, reminderItems);
-
 
         healthFactsCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
+
         moreOptionsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +113,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         popup.show();
     }
 
+//    private void setListeners(){
+//        runOnUiThread(new Runnable(){
+//            public void run() {
+//
+//        });
+//}
     @Override
     public boolean onMenuItemClick(MenuItem item) {
 
