@@ -12,20 +12,12 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="100dp"
         android:background="#3F51B5"
         app:titleTextColor="@android:color/white"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 
-
-        <Button
-                android:id="@+id/buttonReminder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="75dp"
-                android:text="Daily reminder" />
 
 
     <androidx.cardview.widget.CardView
@@ -33,9 +25,9 @@
         android:layout_width="370dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
+        android:layout_margin="5dp"
         android:clickable="true"
-        app:cardBackgroundColor="#57B7DF"
-        app:cardUseCompatPadding="true">
+        app:cardBackgroundColor="#57B7DF">
 
 
         <LinearLayout
@@ -119,9 +111,6 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 app:cardBackgroundColor="#AB3BCD">
-
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"

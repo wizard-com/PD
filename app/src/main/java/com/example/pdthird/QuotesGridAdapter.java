@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class QuotesGridAdapter extends ArrayAdapter {
         // Obtain the UI components and do the necessary binding
         TextView tvTitle = rowView.findViewById(R.id.textViewTitle);
         ImageView ivItem = rowView.findViewById(R.id.imageViewCategory);
+        CardView cardView = rowView.findViewById(R.id.categoryCard);
 
         // Obtain the Android Version information based on the position
         GridItem item = imageIDs.get(position);
@@ -50,6 +52,7 @@ public class QuotesGridAdapter extends ArrayAdapter {
         // Set values to the TextView to display the corresponding information
         tvTitle.setBackgroundColor(Color.parseColor(item.getColorCode()));
         tvTitle.setText(item.getTitle());
+        cardView.setBackgroundColor(Color.parseColor(item.getColorCode()));
         ivItem.setImageResource(item.getImageID());
 
         return rowView;

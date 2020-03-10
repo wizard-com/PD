@@ -23,12 +23,12 @@ public class QuotesCategoriesActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridViewCategories);
         gridItems = new ArrayList<GridItem>();
-        gridItems.add(new GridItem("Life", R.drawable.life, "#167DC2"));
-        gridItems.add(new GridItem("Health", R.drawable.health, "#D3234B"));
-        gridItems.add(new GridItem("Happiness", R.drawable.happiness, "#F8981D"));
-        gridItems.add(new GridItem("Motivational", R.drawable.motivation, "#FFCC33"));
-        gridItems.add(new GridItem("Knowledge", R.drawable.knowledge, "#4AA84A"));
-        gridItems.add(new GridItem("Art", R.drawable.art, "#D93E8F"));
+        gridItems.add(new GridItem("Life", R.drawable.life, "#2772B6"));
+        gridItems.add(new GridItem("Health", R.drawable.health, "#CD3738"));
+        gridItems.add(new GridItem("Happiness", R.drawable.happiness, "#F08A3F"));
+        gridItems.add(new GridItem("Motivational", R.drawable.motivation, "#F5B404"));
+        gridItems.add(new GridItem("Knowledge", R.drawable.knowledge, "#00B266"));
+        gridItems.add(new GridItem("Art", R.drawable.art, "#C63570"));
 
         quotesGridAdapter = new QuotesGridAdapter(QuotesCategoriesActivity.this, R.layout.custom_grid_item, gridItems);
         quotesGridAdapter.notifyDataSetChanged();

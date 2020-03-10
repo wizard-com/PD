@@ -40,15 +40,15 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         healthFactsCard = findViewById(R.id.healthFactsCard);
         moreOptionsCard = findViewById(R.id.moreOptionsCard);
 
-        btnReminder = findViewById(R.id.buttonReminder);
+//        btnReminder = findViewById(R.id.buttonReminder);
 
-        reminderItems = new ArrayList<ReminderItem>();
-        reminderLVAdapter = new ReminderListViewAdapter(MainActivity.this, R.layout.custom_list_view, reminderItems);
-        reminderItems.add(new ReminderItem("10 glasses of water", R.drawable.glass2));
-        reminderItems.add(new ReminderItem("5 minutes of meditation", R.drawable.meditation2));
-        reminderItems.add(new ReminderItem("9000 steps", R.drawable.steps));
-        reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
-        reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
+//        reminderItems = new ArrayList<ReminderItem>();
+//        reminderLVAdapter = new ReminderListViewAdapter(MainActivity.this, R.layout.custom_list_view, reminderItems);
+//        reminderItems.add(new ReminderItem("10 glasses of water", R.drawable.glass2));
+//        reminderItems.add(new ReminderItem("5 minutes of meditation", R.drawable.meditation2));
+//        reminderItems.add(new ReminderItem("9000 steps", R.drawable.steps));
+//        reminderItems.add(new ReminderItem("7-9 Hours of sleep", R.drawable.sleep));
+//        reminderItems.add(new ReminderItem("1 physical activity", R.drawable.physical_activity));
 
         healthFactsCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,21 +90,21 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
-        btnReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View row = inflater.inflate(R.layout.dialog, null);
-                lv = (ListView)row.findViewById(R.id.lvReminderItems);
-                lv.setAdapter(reminderLVAdapter);
-                reminderLVAdapter.notifyDataSetChanged();
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setNeutralButton("Ok", null);
-                alert.setView(row);
-                AlertDialog dialog = alert.create();
-                dialog.show();
-            }
-        });
+//        btnReminder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View row = inflater.inflate(R.layout.dialog, null);
+//                lv = (ListView)row.findViewById(R.id.lvReminderItems);
+//                lv.setAdapter(reminderLVAdapter);
+//                reminderLVAdapter.notifyDataSetChanged();
+//                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+//                alert.setNeutralButton("Ok", null);
+//                alert.setView(row);
+//                AlertDialog dialog = alert.create();
+//                dialog.show();
+//            }
+//        });
     }
     public void showMenu(View v){
         PopupMenu popup = new PopupMenu(this, v);
@@ -132,7 +132,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             myIntent = new Intent(MainActivity.this, JokesActivity.class);
             startActivity(myIntent);
         }
-
+        else if (item.getItemId() == R.id.workouts){
+            myIntent = new Intent(MainActivity.this, WorkOutProgramsActivity.class);
+            startActivity(myIntent);
+        }
+        else if (item.getItemId() == R.id.diet){
+            myIntent = new Intent(MainActivity.this, DietPlansActivity.class);
+            startActivity(myIntent);
+        }
         return true;
     }
 

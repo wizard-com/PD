@@ -28,6 +28,8 @@
         <activity android:name=".QuotesCategoriesActivity"/>
         <activity android:name=".QuotesActivity"/>
         <activity android:name=".JokesActivity"/>
+        <activity android:name=".DietPlansActivity"/>
+        <activity android:name=".WorkOutProgramsActivity"/>
     </application>
 
 </manifest>
