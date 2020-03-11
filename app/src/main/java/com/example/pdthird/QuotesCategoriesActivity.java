@@ -45,27 +45,27 @@ public class QuotesCategoriesActivity extends AppCompatActivity {
 
                 if(position == 0){
                     url_path = "?filter=life&type=tag";
-                    color_code = "#167DC2";
+                    color_code = "#2772B6";
                 }
                 else if (position == 1){
                     url_path = "?filter=health&type=tag";
-                    color_code = "#D3234B";
+                    color_code = "#CD3738";
                 }
                 else if (position == 2){
                     url_path = "?filter=happiness&type=tag";
-                    color_code = "#F8981D";
+                    color_code = "#F08A3F";
                 }
                 else if (position == 3){
                     url_path = "?filter=motivational&type=tag";
-                    color_code = "#FFCC33";
+                    color_code = "#F5B404";
                 }
                 else if (position == 4){
                     url_path = "?filter=knowledge&type=tag";
-                    color_code = "#4AA84A";
+                    color_code = "#00B266";
                 }
                 else {
                     url_path = "?filter=health&type=tag";
-                    color_code = "#D93E8F";
+                    color_code = "#C63570";
                 }
                 dataArr[0] = url_path;
                 dataArr[1] = color_code;

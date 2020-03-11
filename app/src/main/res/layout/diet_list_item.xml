@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ExpandableListView
-        android:id="@+id/expandableDietList"
+    <TextView
+        android:id="@+id/dietListItem"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:groupIndicator="@drawable/border"
-        android:indicatorLeft="0dip" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
 </LinearLayout>
