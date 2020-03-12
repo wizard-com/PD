@@ -18,9 +18,9 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<DietNestedItem> expandableListTitle;
-    private HashMap<String, List<String>> expandableListDetail;
+    private List<List<String>> expandableListDetail;
 
-    public DietListInnerItemAdapter(Context context, List<DietNestedItem> dietTitleItems, HashMap<String, List<String>> expandableListDetail) {
+    public DietListInnerItemAdapter(Context context, List<DietNestedItem> dietTitleItems, List<List<String>>   expandableListDetail) {
         this.context = context;
         this.expandableListTitle = dietTitleItems;
         this.expandableListDetail = expandableListDetail;
@@ -28,7 +28,7 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition).getLabel()).get(expandedListPosition);
+        return this.expandableListDetail.get(expandedListPosition);
     }
 
     @Override
@@ -37,24 +37,25 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int listPosition, final int expandedListPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+    public View getChildView(int listPosition, int expandedListPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.diet_list_item_layer2, null);
-        }
+        LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = layoutInflater.inflate(R.layout.diet_list_innermost_item, null);
 
-        TextView expandedListTextView = (TextView) convertView.findViewById(R.id.tvLayer2);
-        CardView cardView = (CardView) convertView.findViewById(R.id.dayCard);
+        List<String> childArray = expandableListDetail.get(listPosition);
 
-        expandedListTextView.setText(expandedListText);
+        String text = childArray.get(expandedListPosition);
+
+        TextView textView = convertView.findViewById(R.id.tvInnerMost);
+
+        textView.setText(text);
+
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int listPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition).getLabel()).size();
+        return this.expandableListDetail.size();
     }
 
     @Override
@@ -75,16 +76,15 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int listPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-        DietTitleItem listTitle = (DietTitleItem) getGroup(listPosition);
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.diet_list_item_layer2, null);
-        }
+        DietNestedItem listTitle = (DietNestedItem) getGroup(listPosition);
+
+        LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = layoutInflater.inflate(R.layout.diet_list_item, null);
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.tvLayer2);
         CardView cardView = (CardView) convertView.findViewById(R.id.dayCard);
 
         cardView.setBackgroundColor(Color.parseColor(listTitle.getColorCode()));
-        listTitleTextView.setText(listTitle.getTitle());
+        listTitleTextView.setText(listTitle.getLabel());
 
         return convertView;
     }
