@@ -28,7 +28,7 @@ public class DietListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition)).get(expandedListPosition);
+        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition).getTitle()).get(expandedListPosition);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DietListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int listPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition)).size();
+        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition).getTitle()).size();
     }
 
     @Override

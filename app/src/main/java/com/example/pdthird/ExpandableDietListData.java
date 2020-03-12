@@ -8,30 +8,45 @@ import java.util.List;
         public static HashMap<String, List<String>> getData() {
             HashMap<String, List<String>> expandableListDetail = new HashMap<String, List<String>>();
 
-            List<String> cricket = new ArrayList<String>();
-            cricket.add("India");
-            cricket.add("Pakistan");
-            cricket.add("Australia");
-            cricket.add("England");
-            cricket.add("South Africa");
+            List<String> protein = new ArrayList<String>();
+            protein.add("Fish");
+            protein.add("Chicken");
+            protein.add("Pork");
+            protein.add("Beef");
+            protein.add("Eggs");
 
-            List<String> football = new ArrayList<String>();
-            football.add("Brazil");
-            football.add("Spain");
-            football.add("Germany");
-            football.add("Netherlands");
-            football.add("Italy");
+            List<String> fibre = new ArrayList<String>();
+            fibre.add("Spinach");
+            fibre.add("Lettuce");
+            fibre.add("Cabbage");
+            fibre.add("Broccoli");
+            fibre.add("Cucumber");
 
-            List<String> basketball = new ArrayList<String>();
-            basketball.add("United States");
-            basketball.add("Spain");
-            basketball.add("Argentina");
-            basketball.add("France");
-            basketball.add("Russia");
+            List<String> lowFat = new ArrayList<String>();
+            lowFat.add("No diary products");
+            lowFat.add("No nuts");
+            lowFat.add("No fatty fish");
+            lowFat.add("No fried food");
 
-            expandableListDetail.put("CRICKET TEAMS", cricket);
-            expandableListDetail.put("FOOTBALL TEAMS", football);
-            expandableListDetail.put("BASKETBALL TEAMS", basketball);
+            List<String> lowCarb = new ArrayList<String>();
+            lowCarb.add("No rice");
+            lowCarb.add("No bread");
+            lowCarb.add("No sweet potatoes");
+            lowCarb.add("No pizza");
+            lowCarb.add("No other carbs");
+
+            List<String> balanced = new ArrayList<String>();
+            balanced.add("United States");
+            balanced.add("Spain");
+            balanced.add("Argentina");
+            balanced.add("France");
+            balanced.add("Russia");
+
+            expandableListDetail.put("High-protein diet", protein);
+            expandableListDetail.put("High-fibre diet", fibre);
+            expandableListDetail.put("Low-fat diet", lowFat);
+            expandableListDetail.put("Low-carb diet", lowCarb);
+            expandableListDetail.put("Balanced diet", balanced);
             return expandableListDetail;
         }
     }

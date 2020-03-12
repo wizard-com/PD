@@ -8,7 +8,7 @@
         android:id="@+id/expandableDietList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:groupIndicator="@drawable/border"
-        android:indicatorLeft="0dip" />
+        android:groupIndicator="@null"
+        android:divider="@null" />
 
 </LinearLayout>
