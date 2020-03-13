@@ -22,9 +22,9 @@ public class DietListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<List<DietNestedItem>> secondLevel;
     private List<DietTitleItem> expandableListTitle;
-    private List<LinkedHashMap<String, List<String>>> expandableListDetail;
+    private List<LinkedHashMap<String, List<DietNestedItem>>> expandableListDetail;
 
-    public DietListAdapter(Context context, List<DietTitleItem> dietTitleItems, List<List<DietNestedItem>> secondLevel, List<LinkedHashMap<String, List<String>>> expandableListDetail) {
+    public DietListAdapter(Context context, List<DietTitleItem> dietTitleItems, List<List<DietNestedItem>> secondLevel, List<LinkedHashMap<String, List<DietNestedItem>>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = dietTitleItems;
         this.secondLevel = secondLevel;
@@ -49,10 +49,10 @@ public class DietListAdapter extends BaseExpandableListAdapter {
         List<DietNestedItem> subHeaders = secondLevel.get(listPosition);
 
 
-        List<List<String>> childData = new ArrayList<>();
+        List<List<DietNestedItem>> childData = new ArrayList<>();
 
 
-        HashMap<String, List<String>> secondLevelData = expandableListDetail.get(listPosition);
+        HashMap<String, List<DietNestedItem>> secondLevelData = expandableListDetail.get(listPosition);
 
         for (String key : secondLevelData.keySet()) {
 
@@ -64,6 +64,8 @@ public class DietListAdapter extends BaseExpandableListAdapter {
         secondLevelELV.setAdapter(new DietListInnerItemAdapter(context, subHeaders, childData));
 
         secondLevelELV.setGroupIndicator(null);
+
+        secondLevelELV.setDivider(null);
 
 
         secondLevelELV.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {

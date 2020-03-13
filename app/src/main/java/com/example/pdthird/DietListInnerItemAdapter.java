@@ -18,9 +18,9 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<DietNestedItem> expandableListTitle;
-    private List<List<String>> expandableListDetail;
+    private List<List<DietNestedItem>> expandableListDetail;
 
-    public DietListInnerItemAdapter(Context context, List<DietNestedItem> dietTitleItems, List<List<String>>   expandableListDetail) {
+    public DietListInnerItemAdapter(Context context, List<DietNestedItem> dietTitleItems, List<List<DietNestedItem>>   expandableListDetail) {
         this.context = context;
         this.expandableListTitle = dietTitleItems;
         this.expandableListDetail = expandableListDetail;
@@ -42,13 +42,14 @@ public class DietListInnerItemAdapter extends BaseExpandableListAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.diet_list_innermost_item, null);
 
-        List<String> childArray = expandableListDetail.get(listPosition);
+        List<DietNestedItem> childArray = expandableListDetail.get(listPosition);
 
-        String text = childArray.get(expandedListPosition);
+        DietNestedItem item = childArray.get(expandedListPosition);
 
         TextView textView = convertView.findViewById(R.id.tvInnerMost);
 
-        textView.setText(text);
+        textView.setText(item.getLabel());
+        textView.setBackgroundColor(Color.parseColor(item.getColorCode()));
 
         return convertView;
     }
