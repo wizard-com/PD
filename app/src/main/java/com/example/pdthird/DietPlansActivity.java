@@ -101,63 +101,23 @@ public class DietPlansActivity extends AppCompatActivity {
             }
         }
 
-//        List<LinkedHashMap<String, List<DietNestedItem>>> tempList = new ArrayList<>();
-//
-//        tempList.add(thirdLevelProtein);
-//        tempList.add(thirdLevelFibre);
-//        tempList.add(thirdLevelLowFat);
-//        tempList.add(thirdLevelLowCarb);
-//        tempList.add(thirdLevelBalanced);
-//
-//        for (int i = 0; i < tempList.size(); i++){
-//
-//            LinkedHashMap<String, List<DietNestedItem>> tempItem = tempList.get(i);
-//
-//            for (int j = 0; j < secondLevel.size(); j++){
-//
-//                tempItem.put(secondLevel.get(i).get(j).getLabel(), proteinDiets.get(j));
-//            }
-//        }
-        thirdLevelProtein.put(secondLevel.get(0).get(0).getLabel(), proteinDiets.get(0));
-        thirdLevelProtein.put(secondLevel.get(0).get(1).getLabel(), proteinDiets.get(1));
-        thirdLevelProtein.put(secondLevel.get(0).get(2).getLabel(), proteinDiets.get(2));
-        thirdLevelProtein.put(secondLevel.get(0).get(3).getLabel(), proteinDiets.get(3));
-        thirdLevelProtein.put(secondLevel.get(0).get(4).getLabel(), proteinDiets.get(4));
-        thirdLevelProtein.put(secondLevel.get(0).get(5).getLabel(), proteinDiets.get(5));
-        thirdLevelProtein.put(secondLevel.get(0).get(6).getLabel(), proteinDiets.get(6));
+        List<LinkedHashMap<String, List<DietNestedItem>>> tempList = new ArrayList<>();
 
-        thirdLevelFibre.put(secondLevel.get(1).get(0).getLabel(), fibreDiets.get(0));
-        thirdLevelFibre.put(secondLevel.get(1).get(1).getLabel(), fibreDiets.get(1));
-        thirdLevelFibre.put(secondLevel.get(1).get(2).getLabel(), fibreDiets.get(2));
-        thirdLevelFibre.put(secondLevel.get(1).get(3).getLabel(), fibreDiets.get(3));
-        thirdLevelFibre.put(secondLevel.get(1).get(4).getLabel(), fibreDiets.get(4));
-        thirdLevelFibre.put(secondLevel.get(1).get(5).getLabel(), fibreDiets.get(5));
-        thirdLevelFibre.put(secondLevel.get(1).get(6).getLabel(), fibreDiets.get(6));
+        tempList.add(thirdLevelProtein);
+        tempList.add(thirdLevelFibre);
+        tempList.add(thirdLevelLowFat);
+        tempList.add(thirdLevelLowCarb);
+        tempList.add(thirdLevelBalanced);
 
-        thirdLevelLowFat.put(secondLevel.get(2).get(0).getLabel(), lowFatDiets.get(0));
-        thirdLevelLowFat.put(secondLevel.get(2).get(1).getLabel(), lowFatDiets.get(1));
-        thirdLevelLowFat.put(secondLevel.get(2).get(2).getLabel(), lowFatDiets.get(2));
-        thirdLevelLowFat.put(secondLevel.get(2).get(3).getLabel(), lowFatDiets.get(3));
-        thirdLevelLowFat.put(secondLevel.get(2).get(4).getLabel(), lowFatDiets.get(4));
-        thirdLevelLowFat.put(secondLevel.get(2).get(5).getLabel(), lowFatDiets.get(5));
-        thirdLevelLowFat.put(secondLevel.get(2).get(6).getLabel(), lowFatDiets.get(6));
+        for (int i = 0; i < tempList.size(); i++){
 
-        thirdLevelLowCarb.put(secondLevel.get(3).get(0).getLabel(), lowCarbDiets.get(0));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(1).getLabel(), lowCarbDiets.get(1));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(2).getLabel(), lowCarbDiets.get(2));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(3).getLabel(), lowCarbDiets.get(3));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(4).getLabel(), lowCarbDiets.get(4));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(5).getLabel(), lowCarbDiets.get(5));
-        thirdLevelLowCarb.put(secondLevel.get(3).get(6).getLabel(), lowCarbDiets.get(6));
+            LinkedHashMap<String, List<DietNestedItem>> tempItem = tempList.get(i);
 
-        thirdLevelBalanced.put(secondLevel.get(4).get(0).getLabel(), balancedDiets.get(0));
-        thirdLevelBalanced.put(secondLevel.get(4).get(1).getLabel(), balancedDiets.get(1));
-        thirdLevelBalanced.put(secondLevel.get(4).get(2).getLabel(), balancedDiets.get(2));
-        thirdLevelBalanced.put(secondLevel.get(4).get(3).getLabel(), balancedDiets.get(3));
-        thirdLevelBalanced.put(secondLevel.get(4).get(4).getLabel(), balancedDiets.get(4));
-        thirdLevelBalanced.put(secondLevel.get(4).get(5).getLabel(), balancedDiets.get(5));
-        thirdLevelBalanced.put(secondLevel.get(4).get(6).getLabel(), balancedDiets.get(6));
+            for (int j = 0; j < dietArray[i].size(); j++){
 
+                tempItem.put(secondLevel.get(i).get(j).getLabel(), dietArray[i].get(j));
+            }
+        }
 
         data.add(thirdLevelProtein);
         data.add(thirdLevelFibre);
