@@ -1,29 +1,49 @@
 package com.example.pdthird;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class HealthFactsActivity extends AppCompatActivity {
+
+public class HealthFactsActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
     WebView webView;
+    ProgressBar progressBar;
+    FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_healthfacts);
+
+        progressBar = new ProgressBar(HealthFactsActivity.this, null, android.R.attr.progressBarStyleLarge);
         webView = findViewById(R.id.web_view_health_facts);
         Toolbar toolbar = findViewById(R.id.toolbarFacts);
         setSupportActionBar(toolbar);
-        webView.setWebViewClient(new WebViewClient());
+
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
@@ -37,6 +57,26 @@ public class HealthFactsActivity extends AppCompatActivity {
 
     }
 
+    private void renderProgessBar(){
+        progressBar = new ProgressBar(HealthFactsActivity.this, null, android.R.attr.progressBarStyleLarge);
+        frameLayout = findViewById(R.id.healthFactsLayout);
+
+        FrameLayout.LayoutParams pLayoutParams =
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT);
+        progressBar.setLayoutParams(pLayoutParams);
+        pLayoutParams.gravity = Gravity.CENTER;
+        frameLayout.addView(progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void showMenu(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.facts_sources_menu);
+        popup.show();
+    }
+
     @Override
     public void onBackPressed() {
         if (webView.canGoBack()) {
@@ -46,15 +86,11 @@ public class HealthFactsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.facts_sources_menu, menu);
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
+
+        renderProgessBar();
         String url = "";
         int id = item.getItemId();
 
@@ -71,10 +107,8 @@ public class HealthFactsActivity extends AppCompatActivity {
             url = "https://www.amazinghealthfacts.org/";
         }
         webView.loadUrl(url);
-        return super.onOptionsItemSelected(item);
+        return true;
     }
-
-
 
 
 }
