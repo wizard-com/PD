@@ -28,7 +28,7 @@
         <activity android:name=".QuotesActivity"/>
         <activity android:name=".JokesActivity"/>
         <activity android:name=".DietPlansActivity"/>
-        <activity android:name=".WorkOutProgramsActivity"/>
+        <activity android:name=".WorkOutProgramsActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
