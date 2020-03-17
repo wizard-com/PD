@@ -23,7 +23,7 @@ public class NutritionDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nutrition_data_layout);
+        setContentView(R.layout.activity_nutrition_data);
 
         anyChartView = findViewById(R.id.any_chart_view_nutrition);
 

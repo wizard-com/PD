@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
     <GridView
         android:id="@+id/gridViewCategories"
         android:numColumns="2"
@@ -12,4 +16,5 @@
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp"
         android:stretchMode="columnWidth" />
+    </ScrollView>
 </LinearLayout>

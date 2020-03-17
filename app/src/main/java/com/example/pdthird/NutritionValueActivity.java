@@ -17,11 +17,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.anychart.AnyChart;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NutritionValueActivity extends AppCompatActivity {
 
@@ -32,13 +46,17 @@ public class NutritionValueActivity extends AppCompatActivity {
     Button btnViewData, btnAdd, btnDelete;
     int current_position;
     ArrayList<ImageView> dots;
+    RequestQueue requestQueue;
     LinearLayout dotsContainer;
+    String foodName, qty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nutrition_calculator_form);
+        setContentView(R.layout.activity_nutrition_value);
 
+
+        requestQueue = Volley.newRequestQueue(NutritionValueActivity.this);
         viewPager = findViewById(R.id.chartViewPager);
         btnViewData = findViewById(R.id.viewLineGraph);
         btnAdd = findViewById(R.id.add);
@@ -81,42 +99,63 @@ public class NutritionValueActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
-                alertDialog.setTitle("Confirmation");
-                alertDialog.setMessage("Are you sure you want to delete?"+current_position+" "+pageItems.size());
 
 
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                if(nutritionPageAdapter.getCount() < 1){
+                    alertDialog.setTitle("Warning");
+                    alertDialog.setMessage("No more items to be deleted.");
 
-                                nutritionPageAdapter.removeView(viewPager, current_position);
-                                dots.remove(current_position);
-                                dotsContainer.removeViewAt(current_position);
-                                nutritionPageAdapter.notifyDataSetChanged();
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+                else {
 
-                                if(current_position >= 1 && dots.size() > 0){
-                                    dots.get(current_position-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                    alertDialog.setTitle("Confirmation");
+                    alertDialog.setMessage("Are you sure you want to delete?"+current_position);
+
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    if(nutritionPageAdapter.getCount() == 1){
+                                        current_position = 0;
+                                    }
+                                    nutritionPageAdapter.removeView(viewPager, current_position);
+                                    dots.remove(current_position);
+                                    dotsContainer.removeViewAt(current_position);
+                                    nutritionPageAdapter.notifyDataSetChanged();
+                                    viewPager.setCurrentItem(nutritionPageAdapter.getCount()-1);
+
+                                    if(current_position >= 1 && dots.size() > 0){
+                                        dots.get(current_position-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                                    }
+                                    else if(current_position == 0 && dots.size() > 0 || dots.size() == 1){
+                                        dots.get(0).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                                    }
                                 }
-                                else if(current_position == 0 && dots.size() > 0 || dots.size() == 1){
-                                    dots.get(0).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
                                 }
-                            }
-                        });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                            });
+                }
+
+
                 alertDialog.show();
             }
         });
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String foodName = etFood.getText().toString();
-                String qty = etQty.getText().toString();
+                foodName = etFood.getText().toString();
+                foodName = foodName.toLowerCase();
+                qty = etQty.getText().toString();
 
 
                 if(foodName.length() == 0 || NutritionValueActivity.isParsable(qty) == false){
@@ -132,16 +171,7 @@ public class NutritionValueActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else {
-                    ArrayList<DataEntry> entries = new ArrayList<DataEntry>();
-                    entries.add(new ValueDataEntry("First", Integer.parseInt(qty)));
-                    entries.add(new ValueDataEntry("Second", Integer.parseInt(qty)+20));
-                    entries.add(new ValueDataEntry("Third", Integer.parseInt(qty)+50));
-                    nutritionPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), nutritionPageAdapter.getCount());
-                    nutritionPageAdapter.notifyDataSetChanged();
-                    dots.add(new ImageView(NutritionValueActivity.this));
-                    dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
-                    dotsContainer.addView(dots.get(dots.size()-1));
-                    dots.get(0).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                    makeAPICall();
                 }
             }
         });
@@ -154,6 +184,59 @@ public class NutritionValueActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void makeAPICall(){
+        String url = "https://api.edamam.com/api/food-database/parser?ingr="+foodName+"&app_id=54e01c26&app_key=f8ec4fdaa335cd26821dcce5b00311fa";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    //progressBar.setVisibility(View.VISIBLE);
+                    JSONArray array = response.getJSONArray("parsed");
+
+                    JSONObject object = array.getJSONObject(0).getJSONObject("food").getJSONObject("nutrients");
+                    ArrayList<DataEntry> entries = new ArrayList<DataEntry>();
+
+                    int multiplier = Integer.parseInt(qty)/100;
+
+                    if(object.has("PROCNT")){
+                        entries.add(new ValueDataEntry("Protein", object.getDouble("PROCNT")*multiplier));
+                    }
+                    if(object.has("FAT")){
+                        entries.add(new ValueDataEntry("Fat", object.getDouble("FAT")*multiplier));
+                    }
+                    if(object.has("CHOCDF")){
+                        entries.add(new ValueDataEntry("Carbs", object.getDouble("CHOCDF")*multiplier));
+                    }
+                    if(object.has("FIBTG")){
+                        entries.add(new ValueDataEntry("Fibre", object.getDouble("FIBTG")*multiplier));
+                    }
+                    nutritionPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), nutritionPageAdapter.getCount());
+                    nutritionPageAdapter.notifyDataSetChanged();
+                    dots.add(new ImageView(NutritionValueActivity.this));
+                    dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
+                    dotsContainer.addView(dots.get(dots.size()-1));
+                    dots.get(current_position).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
+                    //progressBar.setVisibility(View.GONE);
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+
+
     public static boolean isParsable(String input){
         try{
             Integer.parseInt(input);
