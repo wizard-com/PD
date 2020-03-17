@@ -1,6 +1,12 @@
 package com.example.pdthird;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,11 +21,21 @@ import com.anychart.data.Set;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.MarkerType;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 public class NutritionDataActivity extends AppCompatActivity {
+
     AnyChartView anyChartView;
+    HashMap<String, double[]> hashMapNutrition = new HashMap<String, double[]>();
+    SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,38 +43,78 @@ public class NutritionDataActivity extends AppCompatActivity {
 
         anyChartView = findViewById(R.id.any_chart_view_nutrition);
 
+        Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MMM-yyyy");
+        TimeZone tzInSG = TimeZone.getTimeZone("Asia/Singapore");
+
+        sdfSG.setTimeZone(tzInSG);
+        sdfSG.format(calendar.getTime());
+        calendar.setTime(date);
+        calendar.setTimeZone(tzInSG);
+
+        String time = sdfSG.format(calendar.getTime());
+        String month = time.substring(3,6);
+        int current_year = Integer.parseInt(time.substring(7,11));
+
         Cartesian cartesian = AnyChart.line();
 
         cartesian.animation(true);
 
-        cartesian.title("Nutrition data over days & months");
+        Intent intent = getIntent();
+        double[] data = intent.getDoubleArrayExtra("nutrient_value");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        if (sharedPreferences.getString("Protein", null) != null && sharedPreferences.getString("Fat", null) != null
+            && sharedPreferences.getString("Carbs", null) != null && sharedPreferences.getString("Fibres", null) != null){
+
+            double[] childArray = hashMapNutrition.get(month);
+
+            double proteinValue = Double.parseDouble(sharedPreferences.getString("Protein", null));
+            double fatValue = Double.parseDouble(sharedPreferences.getString("Fat", null));
+            double carbValue = Double.parseDouble(sharedPreferences.getString("Carbs", null));
+            double fibreValue = Double.parseDouble(sharedPreferences.getString("Fibres", null));
+
+            proteinValue += data[0];
+            fatValue += data[1];
+            carbValue += data[2];
+            fibreValue += data[3];
+
+            childArray[0] += proteinValue;
+            childArray[1] += fatValue;
+            childArray[2] += carbValue;
+            childArray[3] += fibreValue;
+
+            hashMapNutrition.put(month, childArray);
+
+        }
+        else {
+            hashMapNutrition.put(month, data);
+        }
+
+        Set<String> stringList = new ArrayList<>();
+
+        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[0]));
+        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[1]));
+        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[2]));
+        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[3]));
+
+        editor.putStringSet(month, stringList);
+        editor.commit();
+
+        cartesian.title("Nutrition data over months");
 
         cartesian.yAxis(0).title("Macro nutrients in grams(g)");
         List<DataEntry> seriesData = new ArrayList<>();
-        seriesData.add(new CustomDataEntry("1986", 3.6, 2.3, 2.8, 1));
-        seriesData.add(new CustomDataEntry("1987", 7.1, 4.0, 4.1, 1));
-        seriesData.add(new CustomDataEntry("1988", 8.5, 6.2, 5.1, 5));
-        seriesData.add(new CustomDataEntry("1989", 9.2, 11.8, 6.5, 2));
-        seriesData.add(new CustomDataEntry("1990", 10.1, 13.0, 12.5, 1));
-        seriesData.add(new CustomDataEntry("1991", 11.6, 13.9, 18.0, 10));
-        seriesData.add(new CustomDataEntry("1992", 16.4, 18.0, 21.0, 7));
-        seriesData.add(new CustomDataEntry("1993", 18.0, 23.3, 20.3, 1));
-        seriesData.add(new CustomDataEntry("1994", 13.2, 24.7, 19.2, 8));
-        seriesData.add(new CustomDataEntry("1995", 12.0, 18.0, 14.4, 5));
-        seriesData.add(new CustomDataEntry("1996", 3.2, 15.1, 9.2, 7.5));
-        seriesData.add(new CustomDataEntry("1997", 4.1, 11.3, 5.9, 6.4));
-        seriesData.add(new CustomDataEntry("1998", 6.3, 14.2, 5.2, 9.2));
-        seriesData.add(new CustomDataEntry("1999", 9.4, 13.7, 4.7, 10));
-        seriesData.add(new CustomDataEntry("2000", 11.5, 9.9, 4.2, 10));
-        seriesData.add(new CustomDataEntry("2001", 13.5, 12.1, 1.2, 11));
-        seriesData.add(new CustomDataEntry("2002", 14.8, 13.5, 5.4, 8.5));
-        seriesData.add(new CustomDataEntry("2003", 16.6, 15.1, 6.3, 11));
-        seriesData.add(new CustomDataEntry("2004", 18.1, 17.9, 8.9, 5.8));
-        seriesData.add(new CustomDataEntry("2005", 17.0, 18.9, 10.1, 12.2));
-        seriesData.add(new CustomDataEntry("2006", 16.6, 20.3, 11.5, 10));
-        seriesData.add(new CustomDataEntry("2007", 14.1, 20.7, 12.2, 10));
-        seriesData.add(new CustomDataEntry("2008", 15.7, 21.6, 10, 9));
-        seriesData.add(new CustomDataEntry("2009", 12.0, 22.5, 8.9, 11));
+
+        seriesData.add(new CustomDataEntry(month, 10.0, 7.8, 15.5, 12.4));
+        seriesData.add(new CustomDataEntry("April", 0.0, 0.0, 0.0, 0.0));
+        seriesData.add(new CustomDataEntry("May", 0.0, 0.0, 0.0, 0.0));
+        seriesData.add(new CustomDataEntry("June", 0.0, 0.0, 0.0, 0.0));
+
 
         Set set = Set.instantiate();
         set.data(seriesData);
@@ -80,7 +136,7 @@ public class NutritionDataActivity extends AppCompatActivity {
                 .offsetY(5d);
 
         Line series2 = cartesian.line(series2Mapping);
-        series2.name("Carbohydrates");
+        series2.name("Fat");
         series2.hovered().markers().enabled(true);
         series2.hovered().markers()
                 .type(MarkerType.CIRCLE)
@@ -92,7 +148,7 @@ public class NutritionDataActivity extends AppCompatActivity {
                 .offsetY(5d);
 
         Line series3 = cartesian.line(series3Mapping);
-        series3.name("Fats");
+        series3.name("Carbohydrates");
         series3.hovered().markers().enabled(true);
         series3.hovered().markers()
                 .type(MarkerType.CIRCLE)

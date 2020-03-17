@@ -31,7 +31,7 @@ public class BmiDataActivity extends AppCompatActivity {
 
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-M-yyyy");
+        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MMM-yyyy");
         TimeZone tzInSG = TimeZone.getTimeZone("Asia/Singapore");
         sdfSG.setTimeZone(tzInSG);
         sdfSG.format(calendar.getTime());
@@ -39,14 +39,14 @@ public class BmiDataActivity extends AppCompatActivity {
         calendar.setTimeZone(tzInSG);
 
         String time = sdfSG.format(calendar.getTime());
-        String month = time.substring(0,3);
+        String month = time.substring(7,11);
         Intent intent = getIntent();
         double bmi = intent.getDoubleExtra("bmiResult", 0.0);
         double rounded = Math.round(bmi * 10)/10.0;
 
         AlertDialog alertDialog = new AlertDialog.Builder(BmiDataActivity.this).create();
         alertDialog.setTitle("Date");
-        alertDialog.setMessage(time+" "+rounded);
+        alertDialog.setMessage(month+" "+rounded);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -89,6 +89,7 @@ public class BmiDataActivity extends AppCompatActivity {
         data.add(new ValueDataEntry("Oct", 53));
         data.add(new ValueDataEntry("Nov", -15));
         data.add(new ValueDataEntry("Dec", 51));
+
         DataEntry end = new DataEntry();
         end.setValue("x", "End");
         end.setValue("isTotal", true);

@@ -49,6 +49,7 @@ public class NutritionValueActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     LinearLayout dotsContainer;
     String foodName, qty;
+    HashMap<String, HashMap<String, Double>> nutrientMappings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class NutritionValueActivity extends AppCompatActivity {
 
 
         requestQueue = Volley.newRequestQueue(NutritionValueActivity.this);
+        nutrientMappings = new HashMap<String, HashMap<String, Double>>();
+
         viewPager = findViewById(R.id.chartViewPager);
         btnViewData = findViewById(R.id.viewLineGraph);
         btnAdd = findViewById(R.id.add);
@@ -114,7 +117,7 @@ public class NutritionValueActivity extends AppCompatActivity {
                 else {
 
                     alertDialog.setTitle("Confirmation");
-                    alertDialog.setMessage("Are you sure you want to delete?"+current_position);
+                    alertDialog.setMessage("Are you sure you want to delete?");
 
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
                             new DialogInterface.OnClickListener() {
@@ -124,11 +127,13 @@ public class NutritionValueActivity extends AppCompatActivity {
                                     if(nutritionPageAdapter.getCount() == 1){
                                         current_position = 0;
                                     }
+                                    nutrientMappings.remove(nutritionPageAdapter.getPageItem(current_position).getTitle());
                                     nutritionPageAdapter.removeView(viewPager, current_position);
                                     dots.remove(current_position);
                                     dotsContainer.removeViewAt(current_position);
                                     nutritionPageAdapter.notifyDataSetChanged();
                                     viewPager.setCurrentItem(nutritionPageAdapter.getCount()-1);
+
 
                                     if(current_position >= 1 && dots.size() > 0){
                                         dots.get(current_position-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
@@ -158,7 +163,7 @@ public class NutritionValueActivity extends AppCompatActivity {
                 qty = etQty.getText().toString();
 
 
-                if(foodName.length() == 0 || NutritionValueActivity.isParsable(qty) == false){
+                if(foodName.length() == 0 || qty.length() == 0){
                     AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
                     alertDialog.setTitle("Invalid input");
                     alertDialog.setMessage("Please try again.");
@@ -179,8 +184,69 @@ public class NutritionValueActivity extends AppCompatActivity {
         btnViewData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(NutritionValueActivity.this, NutritionDataActivity.class);
-                startActivity(myIntent);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
+
+                if (nutritionPageAdapter.getCount() < 1) {
+                    alertDialog.setTitle("Warning");
+                    alertDialog.setMessage("Please add some food items first.");
+
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                } else {
+
+                    alertDialog.setTitle("Warning");
+                    alertDialog.setMessage("Are you sure you want to proceed and see the line graph? Once done the data in line graph cannot be deleted.");
+
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent myIntent = new Intent(NutritionValueActivity.this, NutritionDataActivity.class);
+
+                            double[] dataArr = new double[4];
+
+                            double netProtein = 0.0;
+                            double netCarbs = 0.0;
+                            double netFibre = 0.0;
+                            double netFat = 0.0;
+
+                            for (String key : nutrientMappings.keySet()) {
+
+                                HashMap<String, Double> data = nutrientMappings.get(key);
+
+                                if(data.get("Protein") != null) {
+                                    netProtein += data.get("Protein");
+                                }
+                                if (data.get("Carbs") != null) {
+                                    netCarbs += data.get("Carbs");
+                                }
+                                if (data.get("Fat") != null) {
+                                    netFat += data.get("Fat");
+                                }
+                                if (data.get("Fibre") != null) {
+                                    netFibre += data.get("Fibre");
+                                }
+                            }
+                            dataArr[0] = netProtein;
+                            dataArr[1] = netFat;
+                            dataArr[2] = netCarbs;
+                            dataArr[3] = netFibre;
+
+                            myIntent.putExtra("nutrient_value", dataArr);
+                            startActivity(myIntent);
+                        }
+                    });
+
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+                alertDialog.show();
             }
         });
     }
@@ -199,18 +265,26 @@ public class NutritionValueActivity extends AppCompatActivity {
 
                     int multiplier = Integer.parseInt(qty)/100;
 
+                    HashMap<String, Double> mappings = new HashMap<String, Double>();
+
                     if(object.has("PROCNT")){
                         entries.add(new ValueDataEntry("Protein", object.getDouble("PROCNT")*multiplier));
+                        mappings.put("Protein", object.getDouble("PROCNT")*multiplier);
                     }
                     if(object.has("FAT")){
                         entries.add(new ValueDataEntry("Fat", object.getDouble("FAT")*multiplier));
+                        mappings.put("Fat", object.getDouble("FAT")*multiplier);
                     }
                     if(object.has("CHOCDF")){
                         entries.add(new ValueDataEntry("Carbs", object.getDouble("CHOCDF")*multiplier));
+                        mappings.put("Carbs", object.getDouble("CHOCDF")*multiplier);
                     }
                     if(object.has("FIBTG")){
                         entries.add(new ValueDataEntry("Fibre", object.getDouble("FIBTG")*multiplier));
+                        mappings.put("Fibre", object.getDouble("FIBTG")*multiplier);
                     }
+                    nutrientMappings.put(foodName, mappings);
+
                     nutritionPageAdapter.addView(new PageItem(new AnyChart(), entries, foodName), nutritionPageAdapter.getCount());
                     nutritionPageAdapter.notifyDataSetChanged();
                     dots.add(new ImageView(NutritionValueActivity.this));
@@ -232,10 +306,7 @@ public class NutritionValueActivity extends AppCompatActivity {
 
         requestQueue.add(request);
 
-
     }
-
-
 
     public static boolean isParsable(String input){
         try{
