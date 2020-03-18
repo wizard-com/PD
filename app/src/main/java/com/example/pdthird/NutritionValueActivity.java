@@ -187,17 +187,7 @@ public class NutritionValueActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
 
-                if (nutritionPageAdapter.getCount() < 1) {
-                    alertDialog.setTitle("Warning");
-                    alertDialog.setMessage("Please add some food items first.");
 
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                } else {
 
                     alertDialog.setTitle("Warning");
                     alertDialog.setMessage("Are you sure you want to proceed and see the line graph? Once done the data in line graph cannot be deleted.");
@@ -245,9 +235,9 @@ public class NutritionValueActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                }
                 alertDialog.show();
-            }
+                }
+
         });
     }
 

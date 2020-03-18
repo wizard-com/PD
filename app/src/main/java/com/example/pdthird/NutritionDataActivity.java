@@ -20,21 +20,27 @@ import com.anychart.data.Mapping;
 import com.anychart.data.Set;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.MarkerType;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class NutritionDataActivity extends AppCompatActivity {
 
     AnyChartView anyChartView;
-    HashMap<String, double[]> hashMapNutrition = new HashMap<String, double[]>();
-    SharedPreferences sharedpreferences;
+    double[] storedData;
+    SharedPreferences sharedPreferences, year;
+    String[] months;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,67 +60,93 @@ public class NutritionDataActivity extends AppCompatActivity {
         calendar.setTimeZone(tzInSG);
 
         String time = sdfSG.format(calendar.getTime());
-        String month = time.substring(3,6);
+        String month =  time.substring(3,6);
         int current_year = Integer.parseInt(time.substring(7,11));
 
         Cartesian cartesian = AnyChart.line();
 
         cartesian.animation(true);
 
+        months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         Intent intent = getIntent();
         double[] data = intent.getDoubleArrayExtra("nutrient_value");
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        List<DataEntry> seriesData = new ArrayList<>();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        year = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor1 = year.edit();
 
-        if (sharedPreferences.getString("Protein", null) != null && sharedPreferences.getString("Fat", null) != null
-            && sharedPreferences.getString("Carbs", null) != null && sharedPreferences.getString("Fibres", null) != null){
+        editor.remove("year").apply();
 
-            double[] childArray = hashMapNutrition.get(month);
-
-            double proteinValue = Double.parseDouble(sharedPreferences.getString("Protein", null));
-            double fatValue = Double.parseDouble(sharedPreferences.getString("Fat", null));
-            double carbValue = Double.parseDouble(sharedPreferences.getString("Carbs", null));
-            double fibreValue = Double.parseDouble(sharedPreferences.getString("Fibres", null));
-
-            proteinValue += data[0];
-            fatValue += data[1];
-            carbValue += data[2];
-            fibreValue += data[3];
-
-            childArray[0] += proteinValue;
-            childArray[1] += fatValue;
-            childArray[2] += carbValue;
-            childArray[3] += fibreValue;
-
-            hashMapNutrition.put(month, childArray);
-
-        }
-        else {
-            hashMapNutrition.put(month, data);
+        if(year.getInt("year", 0) == 0) {
+            editor1.putInt("year", current_year);
+            editor1.apply();
         }
 
-        Set<String> stringList = new ArrayList<>();
+        if(year.getInt("year", 0) < current_year){
+            editor1.clear();
+            editor1.putInt("year", current_year);
+            editor1.apply();
+        }
 
-        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[0]));
-        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[1]));
-        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[2]));
-        stringList.add(String.format("%.2f", hashMapNutrition.get(month)[3]));
+        if (sharedPreferences.getString(month, null) != null) {
 
-        editor.putStringSet(month, stringList);
-        editor.commit();
+            Gson gson = new Gson();
 
+
+            String json = sharedPreferences.getString(month, null);
+            Type type = new TypeToken<double[]>() {
+            }.getType();
+            storedData = gson.fromJson(json, type);
+
+
+            storedData[0] += data[0];
+            storedData[1] += data[1];
+            storedData[2] += data[2];
+            storedData[3] += data[3];
+
+            data[0] = storedData[0];
+            data[1] = storedData[1];
+            data[2] = storedData[2];
+            data[3] = storedData[3];
+
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+
+
+
+        editor.putString(month, json);
+
+
+        editor.apply();
+
+        if(sharedPreferences.getAll() != null) {
+
+            Map<String, ?> keys = sharedPreferences.getAll();
+            Gson gson2 = new Gson();
+
+            for (Map.Entry<String, ?> key : keys.entrySet()) {
+
+                if (Arrays.asList(months).contains(key.getKey())) {
+                    String json2 = sharedPreferences.getString(key.getKey(), null);
+                    Type type = new TypeToken<double[]>() {
+                    }.getType();
+                    double[] array = gson2.fromJson(json2, type);
+                    seriesData.add(new CustomDataEntry(key.getKey(), array[0], array[1], array[2], array[3]));
+                }
+            }
+
+
+        }
         cartesian.title("Nutrition data over months");
 
         cartesian.yAxis(0).title("Macro nutrients in grams(g)");
-        List<DataEntry> seriesData = new ArrayList<>();
 
-        seriesData.add(new CustomDataEntry(month, 10.0, 7.8, 15.5, 12.4));
-        seriesData.add(new CustomDataEntry("April", 0.0, 0.0, 0.0, 0.0));
-        seriesData.add(new CustomDataEntry("May", 0.0, 0.0, 0.0, 0.0));
-        seriesData.add(new CustomDataEntry("June", 0.0, 0.0, 0.0, 0.0));
-
+        seriesData.add(new CustomDataEntry("Apr", 10, 10 , 15, 20));
 
         Set set = Set.instantiate();
         set.data(seriesData);
