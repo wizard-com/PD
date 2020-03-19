@@ -187,8 +187,6 @@ public class NutritionValueActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
 
-
-
                     alertDialog.setTitle("Warning");
                     alertDialog.setMessage("Are you sure you want to proceed and see the line graph? Once done the data in line graph cannot be deleted.");
 

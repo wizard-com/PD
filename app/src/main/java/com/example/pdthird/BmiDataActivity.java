@@ -3,7 +3,10 @@ package com.example.pdthird;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -11,23 +14,39 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 
 import com.anychart.charts.Waterfall;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 
 public class BmiDataActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
+    String[] months;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bmi_data_layout);
+
+        Waterfall waterfall = AnyChart.waterfall();
+
+        waterfall.title("BMI data over months");
+
+        waterfall.yScale().minimum(0d);
+
+        months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
@@ -39,26 +58,24 @@ public class BmiDataActivity extends AppCompatActivity {
         calendar.setTimeZone(tzInSG);
 
         String time = sdfSG.format(calendar.getTime());
-        String month = time.substring(7,11);
+        String month = time.substring(3,6);
         Intent intent = getIntent();
         double bmi = intent.getDoubleExtra("bmiResult", 0.0);
         double rounded = Math.round(bmi * 10)/10.0;
 
-        AlertDialog alertDialog = new AlertDialog.Builder(BmiDataActivity.this).create();
-        alertDialog.setTitle("Date");
-        alertDialog.setMessage(month+" "+rounded);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-        Waterfall waterfall = AnyChart.waterfall();
 
-        waterfall.title("BMI data over months");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        waterfall.yScale().minimum(0d);
+
+        if(bmi != 0.0){
+
+            Gson gson = new Gson();
+            String json = gson.toJson(bmi);
+            editor.putString(month, json);
+            editor.apply();
+
+        }
 
 //        waterfall.yAxis(0).labels().format("${%Value}{scale:(1000000)(1)|(mln)}");
 //        waterfall.labels().enabled(true);
@@ -77,18 +94,34 @@ public class BmiDataActivity extends AppCompatActivity {
 
         List<DataEntry> data = new ArrayList<>();
         data.add(new ValueDataEntry("Start", 23));
-        data.add(new ValueDataEntry("Jan", 25));
-        data.add(new ValueDataEntry("Feb", -46));
-        data.add(new ValueDataEntry("Mar", 10));
-        data.add(new ValueDataEntry("Apr", 37));
-        data.add(new ValueDataEntry("May", -21));
-        data.add(new ValueDataEntry("Jun", 53));
-        data.add(new ValueDataEntry("Jul", 31));
-        data.add(new ValueDataEntry("Aug", -15));
-        data.add(new ValueDataEntry("Sep", 42));
-        data.add(new ValueDataEntry("Oct", 53));
-        data.add(new ValueDataEntry("Nov", -15));
-        data.add(new ValueDataEntry("Dec", 51));
+
+        if(sharedPreferences.getAll() != null) {
+
+            Map<String, ?> keys = sharedPreferences.getAll();
+            Gson gson2 = new Gson();
+
+            for (Map.Entry<String, ?> key : keys.entrySet()) {
+
+                if (Arrays.asList(months).contains(key.getKey())) {
+                    String json2 = sharedPreferences.getString(key.getKey(), null);
+                    Type type = new TypeToken<Double>() {
+                    }.getType();
+                    Double bmiValue = gson2.fromJson(json2, type);
+                    double difference = 0.0;
+
+                    if (bmiValue > 23) {
+                        difference = bmiValue - 23;
+                    } else {
+                        difference = 23 - bmiValue;
+                    }
+                    data.add(new ValueDataEntry(key.getKey(), difference));
+
+                }
+            }
+
+
+        }
+
 
         DataEntry end = new DataEntry();
         end.setValue("x", "End");
