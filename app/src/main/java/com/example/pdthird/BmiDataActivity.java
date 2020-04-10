@@ -46,11 +46,11 @@ public class BmiDataActivity extends AppCompatActivity {
 
         waterfall.yScale().minimum(0d);
 
-        months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        months = new String[]{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
 
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MM-yyyy");
         TimeZone tzInSG = TimeZone.getTimeZone("Asia/Singapore");
         sdfSG.setTimeZone(tzInSG);
         sdfSG.format(calendar.getTime());
@@ -58,7 +58,7 @@ public class BmiDataActivity extends AppCompatActivity {
         calendar.setTimeZone(tzInSG);
 
         String time = sdfSG.format(calendar.getTime());
-        String month = time.substring(3,6);
+        String month = time.substring(3,5);
         Intent intent = getIntent();
         double bmi = intent.getDoubleExtra("bmiResult", 0.0);
         double rounded = Math.round(bmi * 10)/10.0;
@@ -66,6 +66,7 @@ public class BmiDataActivity extends AppCompatActivity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
 
 
         if(bmi != 0.0){
@@ -104,18 +105,28 @@ public class BmiDataActivity extends AppCompatActivity {
 
                 if (Arrays.asList(months).contains(key.getKey())) {
                     String json2 = sharedPreferences.getString(key.getKey(), null);
-                    Type type = new TypeToken<Double>() {
-                    }.getType();
-                    Double bmiValue = gson2.fromJson(json2, type);
-                    double difference = 0.0;
+                    AlertDialog alertDialog = new AlertDialog.Builder(BmiDataActivity.this).create();
+                    alertDialog.setTitle("Date");
+                    alertDialog.setMessage(key.getKey()+" "+json2);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
 
-                    if (bmiValue > 23) {
+                    if (json2.contains("[") == false) {
+                        Type type = new TypeToken<Double>() {
+                        }.getType();
+                        Double bmiValue = gson2.fromJson(json2, type);
+                        double difference = 0.0;
+
                         difference = bmiValue - 23;
-                    } else {
-                        difference = 23 - bmiValue;
-                    }
-                    data.add(new ValueDataEntry(key.getKey(), difference));
 
+                        data.add(new ValueDataEntry(key.getKey(), difference));
+
+                    }
                 }
             }
 
