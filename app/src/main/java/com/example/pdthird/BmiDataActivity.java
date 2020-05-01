@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.anychart.AnyChart;

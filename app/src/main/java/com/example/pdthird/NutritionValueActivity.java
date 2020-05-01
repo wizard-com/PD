@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,7 +49,8 @@ public class NutritionValueActivity extends AppCompatActivity {
     int current_position;
     ArrayList<ImageView> dots;
     RequestQueue requestQueue;
-    LinearLayout dotsContainer;
+    LinearLayout dotsContainer, linearLayout;
+    ProgressBar progressBar;
     String foodName, qty;
     HashMap<String, HashMap<String, Double>> nutrientMappings;
 
@@ -158,6 +161,7 @@ public class NutritionValueActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setUpProgressBar();
                 foodName = etFood.getText().toString();
                 foodName = foodName.toLowerCase();
                 qty = etQty.getText().toString();
@@ -245,7 +249,6 @@ public class NutritionValueActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    //progressBar.setVisibility(View.VISIBLE);
                     JSONArray array = response.getJSONArray("parsed");
 
                     JSONObject object = array.getJSONObject(0).getJSONObject("food").getJSONObject("nutrients");
@@ -279,10 +282,21 @@ public class NutritionValueActivity extends AppCompatActivity {
                     dots.get(dots.size()-1).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.inactive_dots));
                     dotsContainer.addView(dots.get(dots.size()-1));
                     dots.get(current_position).setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dots));
-                    //progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                 }
                 catch (JSONException e){
                     e.printStackTrace();
+                    AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage("The item you just added probably doesn't exists or there's a network connection time out. Please try again.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
@@ -303,5 +317,17 @@ public class NutritionValueActivity extends AppCompatActivity {
         }catch(ParseException e){
             return false;
         }
+    }
+
+    private void setUpProgressBar(){
+        progressBar = new ProgressBar(NutritionValueActivity.this, null, android.R.attr.progressBarStyleLarge);
+        linearLayout = findViewById(R.id.ntLayout);
+
+        LinearLayout.LayoutParams pLayoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        progressBar.setLayoutParams(pLayoutParams);
+        pLayoutParams.gravity = Gravity.CENTER;
+        linearLayout.addView(progressBar);
     }
 }

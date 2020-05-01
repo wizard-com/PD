@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,7 +40,7 @@ public class NutritionDataActivity extends AppCompatActivity {
     AnyChartView anyChartView;
     double[] storedData;
     SharedPreferences sharedPreferences, year;
-    String[] months;
+    ArrayList<String> months;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class NutritionDataActivity extends AppCompatActivity {
 
         cartesian.animation(true);
 
-        months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        months = new ArrayList<String>(Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
         Intent intent = getIntent();
         double[] data = intent.getDoubleArrayExtra("nutrient_value");
 
@@ -78,7 +78,6 @@ public class NutritionDataActivity extends AppCompatActivity {
         year = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor1 = year.edit();
 
-        editor.remove("year").apply();
 
 
         if(year.getInt("year", 0) == 0) {
@@ -101,7 +100,6 @@ public class NutritionDataActivity extends AppCompatActivity {
 
                 String json = sharedPreferences.getString(month, null);
 
-                if(json.contains("[")) {
                     Type type = new TypeToken<double[]>() {
                     }.getType();
                     storedData = gson.fromJson(json, type);
@@ -116,7 +114,7 @@ public class NutritionDataActivity extends AppCompatActivity {
                     data[1] = storedData[1];
                     data[2] = storedData[2];
                     data[3] = storedData[3];
-                }
+
 
             }
 
@@ -127,6 +125,12 @@ public class NutritionDataActivity extends AppCompatActivity {
 
         editor.apply();
 
+        for(int i = 0; i < months.size(); i++){
+
+            seriesData.add(new CustomDataEntry(months.get(i), 0.0, 0.0, 0.0, 0.0));
+
+        }
+
         if(sharedPreferences.getAll() != null) {
 
             Map<String, ?> keys = sharedPreferences.getAll();
@@ -134,28 +138,30 @@ public class NutritionDataActivity extends AppCompatActivity {
 
             for (Map.Entry<String, ?> key : keys.entrySet()) {
 
-                if (Arrays.asList(months).contains(key.getKey())) {
+                if (months.contains(key.getKey())) {
                     String json2 = sharedPreferences.getString(key.getKey(), null);
 
-                    AlertDialog alertDialog = new AlertDialog.Builder(NutritionDataActivity.this).create();
-                    alertDialog.setTitle("Date");
-                    alertDialog.setMessage(key.getKey()+" "+json2);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-                    if(json2.contains("[")) {
+//                    AlertDialog alertDialog = new AlertDialog.Builder(NutritionDataActivity.this).create();
+//                    alertDialog.setTitle("Date");
+//                    alertDialog.setMessage(key.getKey()+" "+json2);
+//                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                }
+//                            });
+//                    alertDialog.show();
+
                         Type type = new TypeToken<double[]>() {
                         }.getType();
                         double[] array = gson2.fromJson(json2, type);
-                   seriesData.add(new CustomDataEntry(key.getKey(), array[0], array[1], array[2], array[3]));
-                    }
+
+                        int index = months.indexOf(key.getKey());
+
+                   seriesData.set(index, new CustomDataEntry(key.getKey(), array[0], array[1], array[2], array[3]));
+
                 }
             }
-
 
         }
         cartesian.title("Nutrition data over months");
