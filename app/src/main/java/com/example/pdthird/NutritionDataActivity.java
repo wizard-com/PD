@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,12 +85,15 @@ public class NutritionDataActivity extends AppCompatActivity {
         if(year.getInt("year", 0) == 0) {
             editor1.putInt("year", current_year);
             editor1.apply();
+            Log.d("Year", "SharePreference Empty");
         }
 
         if(year.getInt("year", 0) < current_year){
             editor1.clear();
             editor1.putInt("year", current_year);
             editor1.apply();
+            editor.clear().apply();
+
         }
 
 
