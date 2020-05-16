@@ -91,7 +91,7 @@ public class DailyNutritionActivity extends AppCompatActivity {
 
         editor.apply();
 
-        if(sharedPreferences.getString("today", null) != null && !today.equals(day)){
+        if(sharedPreferences.getString("today", null) != null && !today.equals(sharedPreferences.getString("today", null))){
             editor.remove(day).apply();
             Log.d("Status","SharedPreference removed.");
         }
@@ -123,19 +123,19 @@ public class DailyNutritionActivity extends AppCompatActivity {
             String message = "It appears that ";
 
             if (array[0] <= 80){
-                message = "your daily protein intake is a bit low. Why don't you check out and try some high-protein diet plans?";
+                message += "your daily protein intake is a bit low. Why don't you check out and try some high-protein diet plans?";
             }
 
             if (array[1] >= 77){
-                message = "your daily protein intake is a bit low. Why don't you check out and try some low-fat diet plans?";
+                message += "your daily fat intake is a bit high. Why don't you check out and try some low-fat diet plans?";
             }
 
             if (array[2] >= 325){
-                message = "your daily protein intake is a bit low. Why don't you check out and try some low-carb diet plans?";
+                message += "your daily carbohydrate intake is a bit high. Why don't you check out and try some low-carb diet plans?";
             }
 
             if (array[3] <= 30){
-                message = "your daily protein intake is a bit low. Why don't you check out and try some high-fibre diet plans?";
+                message += "your daily fibre intake is a bit low. Why don't you check out and try some high-fibre diet plans?";
             }
 
             alertDialog.setTitle("Reminder");
@@ -155,6 +155,8 @@ public class DailyNutritionActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
+
+            alertDialog.show();
         }
         pie.data(data);
         anyChartView.setChart(pie);

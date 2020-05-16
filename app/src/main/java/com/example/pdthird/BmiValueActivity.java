@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,11 +16,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class BmiValueActivity extends AppCompatActivity {
 
@@ -26,9 +23,9 @@ public class BmiValueActivity extends AppCompatActivity {
     TextView tvBmiResult;
     EditText etWeight, etHeight;
     SharedPreferences sharedPreferences;
-    int[] splittedDayMonth;
-    String month;
     double bmi;
+    String colorCode;
+    boolean isSame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,37 +41,10 @@ public class BmiValueActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        Date date = new Date();
-        Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MM-yyyy");
-        TimeZone tzInSG = TimeZone.getTimeZone("Asia/Singapore");
-        sdfSG.setTimeZone(tzInSG);
-        sdfSG.format(calendar.getTime());
-        calendar.setTime(date);
-        calendar.setTimeZone(tzInSG);
 
-        String time = sdfSG.format(calendar.getTime());
-        month = time.substring(3,6);
-        String dayAndMonth = time.substring(0,5);
-        String[] day_month = dayAndMonth.split("-");
+        final AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
 
-        splittedDayMonth = new int[2];
-
-        splittedDayMonth[0] = Integer.parseInt(day_month[0]);
-        splittedDayMonth[1] = Integer.parseInt(day_month[1]);
-
-
-//
-//        AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
-//        alertDialog.setTitle("Date");
-//        alertDialog.setMessage(splittedDayMonth[0]+" "+splittedDayMonth[1]);
-//        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//        alertDialog.show();
+        isSame = false;
 
         btnCalcBMI.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +56,6 @@ public class BmiValueActivity extends AppCompatActivity {
 
                 if(weight.length() == 0 || height.length() == 0){
 
-                    AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
                     alertDialog.setTitle("Invalid input");
                     alertDialog.setMessage("Please try again.");
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -97,16 +66,34 @@ public class BmiValueActivity extends AppCompatActivity {
                             });
                     alertDialog.show();
                 }
-                else {
+                else if (sharedPreferences.getString("weight", null) != null && sharedPreferences.getString("height", null) != null){
 
-                   // if (isValidDate()) {
-                        double weightToFloat = Double.parseDouble(weight);
-                        double heightToFloat = Double.parseDouble(height);
+                    double prevWeight = Double.parseDouble(sharedPreferences.getString("weight", "0.0"));
+
+                    double prevHeight = Double.parseDouble(sharedPreferences.getString("height", "0.0"));
+
+                    double weightToFloat = Double.parseDouble(weight);
+                    double heightToFloat = Double.parseDouble(height);
+
+                    if (prevHeight == heightToFloat && prevWeight == weightToFloat){
+                        isSame = true;
+                        alertDialog.setTitle("Reminder");
+                        alertDialog.setMessage("It looks like the weight and height you have entered now is exactly the same as the ones you entered previously. Please try again.");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                    }
+
+                    else {
 
                         bmi = weightToFloat / (heightToFloat * heightToFloat);
                         double rounded = Math.round(bmi * 10) / 10.0;
                         String result = "";
-                        String colorCode = "";
+                        colorCode = "";
                         BMIResult bmiResult = new BMIResult(bmi, colorCode, result);
 
                         if (rounded < 18.5) {
@@ -128,21 +115,42 @@ public class BmiValueActivity extends AppCompatActivity {
                         tvBmiResult.setTextColor(Color.parseColor(bmiResult.getColorCode()));
                         tvBmiResult.setText(bmiResult.getText());
 
-                        editor.putInt(month, splittedDayMonth[1]);
+                        editor.putString("weight", weight);
+                        editor.putString("height", height);
                         editor.apply();
-                   // }
-                 //   else {
-//                        AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
-//                        alertDialog.setTitle("Reminder");
-//                        alertDialog.setMessage("It appears that you have calculated BMI this month. Please try again next month.");
-//                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//                        alertDialog.show();
-//                    }
+
+                        if (colorCode.equals("#F8BB23") || colorCode.equals("#F85A23")) {
+                            alertDialog.setTitle("Reminder");
+                            alertDialog.setMessage("It seems like you are either overweight or obese. Why don't you try some workout programmes or try low-fat diet for weight loss and read some jokes for stress relief?");
+
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Try Workout programs", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(BmiValueActivity.this, WorkOutProgramsActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Read jokes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(BmiValueActivity.this, JokesActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Try low-fat diet", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(BmiValueActivity.this, DietPlansActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            alertDialog.show();
+                        }
+                    }
+
                 }
             }
         });
@@ -157,12 +165,5 @@ public class BmiValueActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isValidDate(){
 
-        if(sharedPreferences.getInt(month, 0) != 0){
-
-            return splittedDayMonth[1] > sharedPreferences.getInt(month, 0);
-        }
-        return true;
-    }
 }
