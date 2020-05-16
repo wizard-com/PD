@@ -6,7 +6,7 @@
             <item android:id="@+id/diet" android:title="Diet Plans"></item>
         </menu>
     </item>
-     <item android:id="@+id/mental" android:title="Mental Health">
+     <item android:id="@+id/mental" android:title="Stress Relief">
          <menu>
              <item android:id="@+id/quotes" android:title="Quotes"></item>
              <item android:id="@+id/jokes" android:title="Jokes"></item>

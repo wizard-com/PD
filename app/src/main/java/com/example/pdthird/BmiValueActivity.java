@@ -99,7 +99,7 @@ public class BmiValueActivity extends AppCompatActivity {
                 }
                 else {
 
-                    if (isValidDate()) {
+                   // if (isValidDate()) {
                         double weightToFloat = Double.parseDouble(weight);
                         double heightToFloat = Double.parseDouble(height);
 
@@ -130,19 +130,19 @@ public class BmiValueActivity extends AppCompatActivity {
 
                         editor.putInt(month, splittedDayMonth[1]);
                         editor.apply();
-                    }
-                    else {
-                        AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
-                        alertDialog.setTitle("Reminder");
-                        alertDialog.setMessage("It appears that you have calculated BMI this month. Please try again next month.");
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.show();
-                    }
+                   // }
+                 //   else {
+//                        AlertDialog alertDialog = new AlertDialog.Builder(BmiValueActivity.this).create();
+//                        alertDialog.setTitle("Reminder");
+//                        alertDialog.setMessage("It appears that you have calculated BMI this month. Please try again next month.");
+//                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+//                        alertDialog.show();
+//                    }
                 }
             }
         });

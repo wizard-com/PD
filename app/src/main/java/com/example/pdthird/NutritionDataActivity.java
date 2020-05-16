@@ -56,10 +56,10 @@ public class NutritionDataActivity extends AppCompatActivity {
         SimpleDateFormat sdfSG = new SimpleDateFormat("dd-MMM-yyyy");
         TimeZone tzInSG = TimeZone.getTimeZone("Asia/Singapore");
 
-        sdfSG.setTimeZone(tzInSG);
-        sdfSG.format(calendar.getTime());
         calendar.setTime(date);
         calendar.setTimeZone(tzInSG);
+        sdfSG.setTimeZone(tzInSG);
+        sdfSG.format(calendar.getTime());
 
         String time = sdfSG.format(calendar.getTime());
         String month =  time.substring(3,6);
@@ -127,7 +127,6 @@ public class NutritionDataActivity extends AppCompatActivity {
         String json = gson.toJson(data);
         editor.putString(month, json);
 
-
         editor.apply();
 
         for(int i = 0; i < months.size(); i++){
@@ -146,19 +145,11 @@ public class NutritionDataActivity extends AppCompatActivity {
                 if (months.contains(key.getKey())) {
                     String json2 = sharedPreferences.getString(key.getKey(), null);
 
-//                    AlertDialog alertDialog = new AlertDialog.Builder(NutritionDataActivity.this).create();
-//                    alertDialog.setTitle("Date");
-//                    alertDialog.setMessage(key.getKey()+" "+json2);
-//                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    dialog.dismiss();
-//                                }
-//                            });
-//                    alertDialog.show();
+                    Log.d(key.getKey(), json2);
 
                         Type type = new TypeToken<double[]>() {
                         }.getType();
+
                         double[] array = gson2.fromJson(json2, type);
 
                         int index = months.indexOf(key.getKey());

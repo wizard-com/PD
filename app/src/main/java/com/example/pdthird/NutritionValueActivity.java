@@ -191,52 +191,33 @@ public class NutritionValueActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(NutritionValueActivity.this).create();
 
-                    alertDialog.setTitle("Warning");
-                    alertDialog.setMessage("Are you sure you want to proceed and see the line graph? Once done the data in line graph cannot be deleted.");
+                    alertDialog.setTitle("Choose option");
+                    alertDialog.setMessage("Do you want to do view nutrition data by today or by this month?");
 
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "View by today", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        double[] dataArr = getNutritionArray();
+
+                        Intent myIntent = new Intent(NutritionValueActivity.this, DailyNutritionActivity.class);
+                        myIntent.putExtra("nutrient_value", dataArr);
+                        startActivity(myIntent);
+                    }
+                });
+
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "View by this month", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                            double[] dataArr = getNutritionArray();
+
                             Intent myIntent = new Intent(NutritionValueActivity.this, NutritionDataActivity.class);
-
-                            double[] dataArr = new double[4];
-
-                            double netProtein = 0.0;
-                            double netCarbs = 0.0;
-                            double netFibre = 0.0;
-                            double netFat = 0.0;
-
-                            for (String key : nutrientMappings.keySet()) {
-
-                                HashMap<String, Double> data = nutrientMappings.get(key);
-
-                                if(data.get("Protein") != null) {
-                                    netProtein += data.get("Protein");
-                                }
-                                if (data.get("Carbs") != null) {
-                                    netCarbs += data.get("Carbs");
-                                }
-                                if (data.get("Fat") != null) {
-                                    netFat += data.get("Fat");
-                                }
-                                if (data.get("Fibre") != null) {
-                                    netFibre += data.get("Fibre");
-                                }
-                            }
-                            dataArr[0] = netProtein;
-                            dataArr[1] = netFat;
-                            dataArr[2] = netCarbs;
-                            dataArr[3] = netFibre;
-
                             myIntent.putExtra("nutrient_value", dataArr);
                             startActivity(myIntent);
                         }
                     });
 
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
                 alertDialog.show();
                 }
 
@@ -317,6 +298,40 @@ public class NutritionValueActivity extends AppCompatActivity {
         }catch(ParseException e){
             return false;
         }
+    }
+
+    private double[] getNutritionArray(){
+
+        double[] dataArr = new double[4];
+
+        double netProtein = 0.0;
+        double netCarbs = 0.0;
+        double netFibre = 0.0;
+        double netFat = 0.0;
+
+        for (String key : nutrientMappings.keySet()) {
+
+            HashMap<String, Double> data = nutrientMappings.get(key);
+
+            if(data.get("Protein") != null) {
+                netProtein += data.get("Protein");
+            }
+            if (data.get("Carbs") != null) {
+                netCarbs += data.get("Carbs");
+            }
+            if (data.get("Fat") != null) {
+                netFat += data.get("Fat");
+            }
+            if (data.get("Fibre") != null) {
+                netFibre += data.get("Fibre");
+            }
+        }
+        dataArr[0] = netProtein;
+        dataArr[1] = netFat;
+        dataArr[2] = netCarbs;
+        dataArr[3] = netFibre;
+
+        return dataArr;
     }
 
     private void setUpProgressBar(){

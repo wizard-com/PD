@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -33,7 +34,8 @@ import java.util.TimeZone;
 public class BmiDataActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
-    String[] months;
+    String[] months, monthNames;
+    HashMap<String, String> monthNameMappings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,15 @@ public class BmiDataActivity extends AppCompatActivity {
 
         waterfall.yScale().minimum(0d);
 
+        monthNameMappings = new HashMap<String, String>();
+
         months = new String[]{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+
+        monthNames = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        for(int i = 0; i < months.length; i++){
+            monthNameMappings.put(months[i], monthNames[i]);
+        }
 
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
@@ -72,7 +82,7 @@ public class BmiDataActivity extends AppCompatActivity {
         if(bmi != 0.0){
 
             Gson gson = new Gson();
-            String json = gson.toJson(bmi);
+            String json = gson.toJson(rounded);
             editor.putString(month, json);
             editor.apply();
 
@@ -105,18 +115,7 @@ public class BmiDataActivity extends AppCompatActivity {
 
                 if (Arrays.asList(months).contains(key.getKey())) {
                     String json2 = sharedPreferences.getString(key.getKey(), null);
-                    AlertDialog alertDialog = new AlertDialog.Builder(BmiDataActivity.this).create();
-                    alertDialog.setTitle("Date");
-                    alertDialog.setMessage(key.getKey()+" "+json2);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
 
-                    if (json2.contains("[") == false) {
                         Type type = new TypeToken<Double>() {
                         }.getType();
                         Double bmiValue = gson2.fromJson(json2, type);
@@ -124,9 +123,10 @@ public class BmiDataActivity extends AppCompatActivity {
 
                         difference = bmiValue - 23;
 
-                        data.add(new ValueDataEntry(key.getKey(), difference));
+                        String monthName = monthNameMappings.get(key.getKey());
 
-                    }
+                        data.add(new ValueDataEntry(monthName, difference));
+
                 }
             }
 

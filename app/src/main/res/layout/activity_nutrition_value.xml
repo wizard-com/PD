@@ -97,7 +97,7 @@
             android:layout_marginBottom="10dp"
             android:layout_height="35dp"
             android:background="#A62ABD"
-            android:text="View Line Graph"
+            android:text="View nutrition data"
             android:textColor="#ffffff" />
     </LinearLayout>
 
